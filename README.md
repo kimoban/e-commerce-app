@@ -4,15 +4,15 @@ A modern, full-stack e-commerce mobile application built with Django REST framew
 
 ## Table of Contents
 
-- [Features](#features)
-      - [Backend Features](#backend-features)
+- [Features](#features)  
+      - [Backend Features](#backend-features)  
       - [Frontend Features](#frontend-features)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-      - [Prerequisites](#prerequisites)
-      - [Backend Setup (Django)](#backend-setup-django)
-      - [Frontend Setup (Expo React Native)](#frontend-setup-expo-react-native)
+- [Getting Started](#getting-started)  
+      - [Prerequisites](#prerequisites)  
+      - [Backend Setup (Django)](#backend-setup-django)  
+      - [Frontend Setup (Expo React Native)](#frontend-setup-expo-react-native)  
 - [Environment Variables](#environment-variables)
 - [Customization & Branding](#customization--branding)
 - [Scripts](#scripts)
