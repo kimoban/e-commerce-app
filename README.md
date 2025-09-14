@@ -4,21 +4,21 @@ A modern, full-stack e-commerce mobile application built with Django REST framew
 
 ## Table of Contents
 
-1. [Features](#features)
-   1.1 [Backend Features](#backend-features)
-   1.2 [Frontend Features](#frontend-features)
-2. [Tech Stack](#tech-stack)
-3. [Project Structure](#project-structure)
-4. [Getting Started](#getting-started)
-   4.1 [Prerequisites](#prerequisites)
-   4.2 [Backend Setup (Django)](#backend-setup-django)
-   4.3 [Frontend Setup (Expo React Native)](#frontend-setup-expo-react-native)
-5. [Environment Variables](#environment-variables)
-6. [Customization & Branding](#customization--branding)
-7. [Scripts](#scripts)
-8. [Troubleshooting](#troubleshooting)
-9. [Contributing](#contributing)
-10. [License](#license)
+- [Features](#features)
+      - [Backend Features](#backend-features)
+      - [Frontend Features](#frontend-features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+      - [Prerequisites](#prerequisites)
+      - [Backend Setup (Django)](#backend-setup-django)
+      - [Frontend Setup (Expo React Native)](#frontend-setup-expo-react-native)
+- [Environment Variables](#environment-variables)
+- [Customization & Branding](#customization--branding)
+- [Scripts](#scripts)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 
