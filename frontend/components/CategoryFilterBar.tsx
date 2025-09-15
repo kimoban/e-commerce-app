@@ -14,7 +14,7 @@ interface CategoryFilterBarProps {
 export default function CategoryFilterBar({ selected, onSelect }: CategoryFilterBarProps) {
   const [categories, setCategories] = useState<Category[]>([]);
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/categories/')
+  fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/categories/`)
       .then(res => res.json())
       .then(data => setCategories(data));
   }, []);

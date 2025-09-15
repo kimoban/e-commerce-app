@@ -8,7 +8,7 @@ import { useRoute } from '@react-navigation/native';
 
 
 
-const API_URL = 'http://127.0.0.1:8000/api/products/';
+const API_URL = `${process.env.EXPO_PUBLIC_API_URL}/api/products/`;
 
 type Product = {
   id: number;

@@ -9,7 +9,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 
 
-const API_URL = 'http://127.0.0.1:8000/api/products/';
+const API_URL = `${process.env.EXPO_PUBLIC_API_URL}/api/products/`;
 
 type Product = {
   id: number;
