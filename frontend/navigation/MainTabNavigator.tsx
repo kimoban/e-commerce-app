@@ -20,7 +20,7 @@ export default function MainTabNavigator() {
       >;
     }) => ({
       tabBarIcon: ({ color, focused }: { color: string; focused: boolean }) => {
-        let iconName = 'home';
+        let iconName: React.ComponentProps<typeof Ionicons>['name'] = 'home';
         if (route.name === 'Home') iconName = 'home';
         else if (route.name === 'Products') iconName = 'pricetags';
         else if (route.name === 'Cart') iconName = 'cart';

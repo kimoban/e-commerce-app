@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import TailwindSmoke from '../components/TailwindSmoke';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 
@@ -17,6 +18,7 @@ const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     <View className="flex-1 justify-center bg-white px-6">
+      <TailwindSmoke />
       <Text className="text-3xl font-bold mb-10 text-center">Welcome to E-Com Shop!</Text>
       <TouchableOpacity
         className="bg-blue-600 rounded-lg py-4 mb-4 w-full items-center"
