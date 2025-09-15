@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: ecommerce-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn ecommerce.wsgi:application
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        value: your-secret-key
+      - key: DATABASE_URL
+        value: your-database-url
+      - key: ALLOWED_HOSTS
+        value: your-backend-domain.onrender.com
+      - key: DEBUG
+        value: "False"
+      # Add more as needed
+
+databases:
+  - name: ecommerce-db
+    plan: starter
+    databaseName: ecommerce
+    user: ecommerce_user
+    # Render will auto-provision DATABASE_URL
