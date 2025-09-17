@@ -4,3 +4,4 @@ djangorestframework
 rest_framework_simplejwt
 drf-yasg
 dj-database-url
+gunicorn
