@@ -2,5 +2,5 @@ DJango>=5.2.6
 psycopg2-binary
 djangorestframework
 rest_framework_simplejwt
-drfg_yasg
+drf-yasg
 dj-database-url
