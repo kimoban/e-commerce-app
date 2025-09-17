@@ -1,7 +1,7 @@
 DJango>=5.2.6
 psycopg2-binary
 djangorestframework
-rest_framework_simplejwt
+djangorestframework-simplejwt
 drf-yasg
 dj-database-url
 gunicorn
