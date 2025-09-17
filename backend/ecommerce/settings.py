@@ -29,7 +29,10 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-dgupsvvt6((9c-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',') if os.environ.get('ALLOWED_HOSTS') else []
+ALLOWED_HOSTS = [
+    'e-commerce-app-ss2x.onrender.com',
+    'localhost',
+]
 
 
 # Application definition
