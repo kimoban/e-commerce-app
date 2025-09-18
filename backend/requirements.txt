@@ -6,3 +6,5 @@ drf-yasg
 dj-database-url
 gunicorn
 whitenoise
+celery
+django-celery-results
