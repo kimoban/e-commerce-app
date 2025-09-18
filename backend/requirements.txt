@@ -10,3 +10,4 @@ celery
 django-celery-results
 django-extensions
 sentry-sdk
+django-cors-headers
