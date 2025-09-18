@@ -17,14 +17,30 @@ type ProductCardProps = {
   loading?: boolean;
 };
 
-export default function ProductCard({ product, onPress, loading }: ProductCardProps) {
+import type { AccessibilityRole } from 'react-native';
+
+export default function ProductCard({ product, onPress, loading, accessibilityLabel, accessibilityRole, testID }: ProductCardProps & {
+  accessibilityLabel?: string;
+  accessibilityRole?: AccessibilityRole;
+  testID?: string;
+}) {
   return (
     <Animated.View
       entering={FadeIn.duration(400)}
       exiting={FadeOut.duration(300)}
       layout={Layout.springify()}
+      accessibilityLabel={accessibilityLabel}
+  accessibilityRole={accessibilityRole}
+      testID={testID}
     >
-      <TouchableOpacity disabled={loading} onPress={onPress} className="w-full mb-3" testID="product-card">
+      <TouchableOpacity
+        disabled={loading}
+        onPress={onPress}
+        className="w-full mb-3"
+        accessibilityLabel={accessibilityLabel}
+  accessibilityRole={accessibilityRole ?? 'button'}
+        testID={testID}
+      >
         <View className="flex-row bg-white rounded-lg shadow-lg elevation-3 p-3 items-center">
           {loading ? (
             <Skeleton className="w-20 h-20 rounded mr-4" />
@@ -33,6 +49,8 @@ export default function ProductCard({ product, onPress, loading }: ProductCardPr
               source={{ uri: product?.image }}
               className="w-20 h-20 rounded mr-4 bg-gray-100"
               resizeMode="cover"
+              accessibilityLabel={product?.name ? `Image of ${product.name}` : 'Product image'}
+              testID={product?.name ? `product-image-${product.name}` : 'product-image'}
             />
           )}
           <View className="flex-1 ml-2">
@@ -44,11 +62,11 @@ export default function ProductCard({ product, onPress, loading }: ProductCardPr
               </>
             ) : (
               <>
-                <Text className="text-base font-semibold text-gray-900 mb-1">{product?.name}</Text>
+                <Text className="text-base font-semibold text-gray-900 mb-1" accessibilityLabel={`Product name: ${product?.name}`}>{product?.name}</Text>
                 {product?.brand && (
-                  <Text className="text-xs text-gray-500 mb-1">{product.brand}</Text>
+                  <Text className="text-xs text-gray-500 mb-1" accessibilityLabel={`Brand: ${product.brand}`}>{product.brand}</Text>
                 )}
-                <Text className="text-base font-bold text-blue-600">${product?.price}</Text>
+                <Text className="text-base font-bold text-blue-600" accessibilityLabel={`Price: $${product?.price}`}>${product?.price}</Text>
               </>
             )}
           </View>
