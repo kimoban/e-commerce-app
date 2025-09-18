@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState } from 'react';
+import Animated, { FadeIn, FadeOut, Layout } from 'react-native-reanimated';
+import { useQuery } from '@tanstack/react-query';
 import { View, Text, ActivityIndicator, FlatList, RefreshControl, TouchableOpacity } from 'react-native';
 // Removed styled import, using className prop
 import ProductCard from '../components/ProductCard';
@@ -28,16 +30,27 @@ const PAGE_SIZE = 10;
 
 const ProductListScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [page, setPage] = useState(1);
-  const [refreshing, setRefreshing] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [sort, setSort] = useState<'price_asc' | 'price_desc'>('price_asc');
   const [viewType, setViewType] = useState<'grid' | 'list'>('grid');
+  const [page, setPage] = useState(1);
+  const [refreshing, setRefreshing] = useState(false);
 
+  const fetchProducts = async () => {
+    let url = `${API_URL}?page=${page}&page_size=${PAGE_SIZE}`;
+    if (selectedCategory) url += `&category=${selectedCategory}`;
+    if (sort === 'price_asc') url += `&ordering=price`;
+    if (sort === 'price_desc') url += `&ordering=-price`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Failed to fetch products');
+    return response.json();
+  };
+
+  const { data, error, isLoading, refetch } = useQuery([
+    'products', page, selectedCategory, sort
+  ], fetchProducts, {
+    keepPreviousData: true,
+  });
   const fetchProducts = useCallback(async (reset = false) => {
     if (loading) return;
     setLoading(true);
@@ -62,19 +75,14 @@ const ProductListScreen = () => {
     }
   }, [page, products, loading, selectedCategory, sort]);
 
-  useEffect(() => {
-    fetchProducts(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategory, sort]);
-
   const handleLoadMore = () => {
-    if (!loading && hasMore) fetchProducts();
+    if (data?.next) setPage(page + 1);
   };
 
   const onRefresh = () => {
     setRefreshing(true);
     setPage(1);
-    fetchProducts(true);
+    refetch().finally(() => setRefreshing(false));
   };
 
   return (
@@ -111,26 +119,26 @@ const ProductListScreen = () => {
         </View>
       </View>
       {/* Product count display */}
-      <Text className="mb-2 text-gray-600">{products.length} products found</Text>
+  <Text className="mb-2 text-gray-600">{data?.results?.length || 0} products found</Text>
       {error ? (
         <View className="flex-1 items-center justify-center">
-          <Text className="text-red-500 text-base mb-4">{error}</Text>
+          <Text className="text-red-500 text-base mb-4">{error.message || 'Error loading products'}</Text>
           <TouchableOpacity
             className="bg-blue-600 px-4 py-2 rounded"
-            onPress={() => fetchProducts(true)}
+            onPress={() => refetch()}
             accessibilityRole="button"
             accessibilityLabel="Retry"
           >
             <Text className="text-white font-semibold">Retry</Text>
           </TouchableOpacity>
         </View>
-      ) : loading && products.length === 0 ? (
+      ) : isLoading && (!data?.results || data.results.length === 0) ? (
         <View className="mt-4">
           {[...Array(6)].map((_, i) => (
             <ProductCard key={i} loading />
           ))}
         </View>
-      ) : products.length === 0 ? (
+      ) : !data?.results || data.results.length === 0 ? (
         <View className="flex-1 items-center justify-center mt-16">
           <Text className="text-gray-500 text-base mb-4">No products found.</Text>
           <View className="bg-gray-100 rounded-full w-32 h-32 items-center justify-center">
@@ -139,11 +147,16 @@ const ProductListScreen = () => {
         </View>
       ) : (
         <FlatList
-          data={products}
+          data={data.results}
           keyExtractor={(_, idx) => idx.toString()}
           numColumns={viewType === 'grid' ? 2 : 1}
           renderItem={({ item }) => (
-            <View className={viewType === 'grid' ? 'flex-1 m-1' : 'w-full mb-2'}>
+            <Animated.View
+              className={viewType === 'grid' ? 'flex-1 m-1' : 'w-full mb-2'}
+              entering={FadeIn.duration(400)}
+              exiting={FadeOut.duration(300)}
+              layout={Layout.springify()}
+            >
               <ProductCard
                 product={item}
                 onPress={() => navigation.navigate('ProductDetail', { productId: item.id })}
@@ -152,12 +165,12 @@ const ProductListScreen = () => {
               <TouchableOpacity className="bg-green-600 rounded-lg py-2 mt-2 items-center">
                 <Text className="text-white font-semibold">Quick Add to Cart</Text>
               </TouchableOpacity>
-            </View>
+            </Animated.View>
           )}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.5}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-          ListFooterComponent={loading && !refreshing ? <ActivityIndicator size="large" color="#2563eb" /> : null}
+          ListFooterComponent={isLoading && !refreshing ? <ActivityIndicator size="large" color="#2563eb" /> : null}
         />
       )}
     </View>
