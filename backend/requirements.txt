@@ -8,3 +8,4 @@ gunicorn
 whitenoise
 celery
 django-celery-results
+django-extensions
