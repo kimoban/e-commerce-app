@@ -112,16 +112,35 @@ const ProductDetailScreen = () => {
           <Text className="text-base text-gray-500 mb-2">{product.brand}</Text>
         )}
         <Text className="text-xl font-bold text-blue-600 mb-2">${product.price}</Text>
+        {/* Ratings & Reviews Placeholder */}
+        <View className="flex-row items-center mb-2">
+          <Text className="text-yellow-500 mr-2">★ ★ ★ ★ ☆</Text>
+          <Text className="text-gray-500">(123 reviews)</Text>
+        </View>
         <Text className="text-base text-gray-700 mb-4">{product.description}</Text>
-        <Text className="text-sm text-gray-500 mb-6">Stock: {product.stock ?? 'N/A'}</Text>
+        {/* Stock status indicator */}
+        <Text className={`text-sm font-semibold mb-6 ${product.stock && product.stock > 0 ? 'text-green-600' : 'text-red-500'}`}>Stock: {product.stock && product.stock > 0 ? 'In Stock' : 'Out of Stock'}</Text>
         <TouchableOpacity
-          className="bg-blue-600 rounded-lg py-3 mt-2 mb-4 items-center"
+          className="bg-blue-600 rounded-lg py-3 mt-2 mb-3 items-center"
           onPress={handleAddToCart}
           accessibilityRole="button"
           accessibilityLabel="Add to Cart"
         >
           <Text className="text-white text-base font-bold uppercase tracking-wide">Add to Cart</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          className="bg-green-600 rounded-lg py-3 mb-4 items-center"
+          onPress={() => {}}
+        >
+          <Text className="text-white text-base font-bold uppercase tracking-wide">Buy Now</Text>
+        </TouchableOpacity>
+        {/* Related Products Placeholder */}
+        <View className="mt-8">
+          <Text className="text-lg font-bold mb-3">Related Products</Text>
+          <View className="bg-gray-100 rounded-lg h-20 items-center justify-center">
+            <Text className="text-gray-400">[Related products coming soon]</Text>
+          </View>
+        </View>
       </ScrollView>
     </View>
   );

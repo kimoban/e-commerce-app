@@ -36,6 +36,7 @@ const ProductListScreen = () => {
   const [hasMore, setHasMore] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [sort, setSort] = useState<'price_asc' | 'price_desc'>('price_asc');
+  const [viewType, setViewType] = useState<'grid' | 'list'>('grid');
 
   const fetchProducts = useCallback(async (reset = false) => {
     if (loading) return;
@@ -79,20 +80,38 @@ const ProductListScreen = () => {
   return (
     <View className="flex-1 bg-gray-50 px-2 pt-2">
       <CategoryFilterBar selected={selectedCategory} onSelect={id => { setSelectedCategory(id); setPage(1); }} />
-      <View className="flex-row mb-2">
-        <TouchableOpacity
-          className={`px-4 py-2 mr-2 rounded-full border ${sort === 'price_asc' ? 'bg-blue-600 border-blue-600' : 'bg-white border-gray-300'}`}
-          onPress={() => setSort('price_asc')}
-        >
-          <Text className={sort === 'price_asc' ? 'text-white font-semibold' : 'text-gray-700'}>Price: Low-High</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          className={`px-4 py-2 mr-2 rounded-full border ${sort === 'price_desc' ? 'bg-blue-600 border-blue-600' : 'bg-white border-gray-300'}`}
-          onPress={() => setSort('price_desc')}
-        >
-          <Text className={sort === 'price_desc' ? 'text-white font-semibold' : 'text-gray-700'}>Price: High-Low</Text>
-        </TouchableOpacity>
+      <View className="flex-row mb-2 items-center justify-between">
+        <View className="flex-row">
+          <TouchableOpacity
+            className={`px-4 py-2 mr-2 rounded-full border ${sort === 'price_asc' ? 'bg-blue-600 border-blue-600' : 'bg-white border-gray-300'}`}
+            onPress={() => setSort('price_asc')}
+          >
+            <Text className={sort === 'price_asc' ? 'text-white font-semibold' : 'text-gray-700'}>Price: Low-High</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className={`px-4 py-2 mr-2 rounded-full border ${sort === 'price_desc' ? 'bg-blue-600 border-blue-600' : 'bg-white border-gray-300'}`}
+            onPress={() => setSort('price_desc')}
+          >
+            <Text className={sort === 'price_desc' ? 'text-white font-semibold' : 'text-gray-700'}>Price: High-Low</Text>
+          </TouchableOpacity>
+        </View>
+        <View className="flex-row">
+          <TouchableOpacity
+            className={`px-3 py-2 rounded border ${viewType === 'grid' ? 'bg-blue-600 border-blue-600' : 'bg-white border-gray-300'}`}
+            onPress={() => setViewType('grid')}
+          >
+            <Text className={viewType === 'grid' ? 'text-white font-semibold' : 'text-gray-700'}>Grid</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className={`ml-2 px-3 py-2 rounded border ${viewType === 'list' ? 'bg-blue-600 border-blue-600' : 'bg-white border-gray-300'}`}
+            onPress={() => setViewType('list')}
+          >
+            <Text className={viewType === 'list' ? 'text-white font-semibold' : 'text-gray-700'}>List</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+      {/* Product count display */}
+      <Text className="mb-2 text-gray-600">{products.length} products found</Text>
       {error ? (
         <View className="flex-1 items-center justify-center">
           <Text className="text-red-500 text-base mb-4">{error}</Text>
@@ -111,15 +130,29 @@ const ProductListScreen = () => {
             <ProductCard key={i} loading />
           ))}
         </View>
+      ) : products.length === 0 ? (
+        <View className="flex-1 items-center justify-center mt-16">
+          <Text className="text-gray-500 text-base mb-4">No products found.</Text>
+          <View className="bg-gray-100 rounded-full w-32 h-32 items-center justify-center">
+            <Text className="text-gray-400">📦</Text>
+          </View>
+        </View>
       ) : (
         <FlatList
           data={products}
           keyExtractor={(_, idx) => idx.toString()}
+          numColumns={viewType === 'grid' ? 2 : 1}
           renderItem={({ item }) => (
-            <ProductCard
-              product={item}
-              onPress={() => navigation.navigate('ProductDetail', { productId: item.id })}
-            />
+            <View className={viewType === 'grid' ? 'flex-1 m-1' : 'w-full mb-2'}>
+              <ProductCard
+                product={item}
+                onPress={() => navigation.navigate('ProductDetail', { productId: item.id })}
+              />
+              {/* Quick add to cart placeholder */}
+              <TouchableOpacity className="bg-green-600 rounded-lg py-2 mt-2 items-center">
+                <Text className="text-white font-semibold">Quick Add to Cart</Text>
+              </TouchableOpacity>
+            </View>
           )}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.5}

@@ -14,11 +14,22 @@ const CartScreen = () => {
   const handleQuantity = (id: number, quantity: number) => dispatch(updateQuantity({ id, quantity }));
   const handleClear = () => dispatch(clearCart());
 
+  // Calculate subtotal
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const shipping = cart.length > 0 ? 5.99 : 0;
+  const total = subtotal + shipping;
+
   return (
     <View className="flex-1 bg-white px-4 pt-4">
       <Text className="text-2xl font-bold mb-4">Cart</Text>
       {cart.length === 0 ? (
-        <Text className="text-gray-500 text-base mt-8 text-center">Your cart is empty.</Text>
+        <View className="items-center mt-16">
+          <Text className="text-gray-500 text-base mb-4 text-center">Your cart is empty.</Text>
+          {/* Empty cart illustration placeholder */}
+          <View className="bg-gray-100 rounded-full w-32 h-32 items-center justify-center">
+            <Text className="text-gray-400">🛒</Text>
+          </View>
+        </View>
       ) : (
         <>
           <FlatList
@@ -55,8 +66,34 @@ const CartScreen = () => {
               </View>
             )}
           />
+          {/* Discount code input placeholder */}
+          <View className="mt-4 mb-2">
+            <Text className="text-base font-medium mb-2">Discount Code</Text>
+            <View className="flex-row">
+              <View className="flex-1">
+                <View className="bg-gray-100 rounded-lg px-3 py-2">
+                  <Text className="text-gray-400">[Enter code]</Text>
+                </View>
+              </View>
+              <TouchableOpacity className="bg-blue-600 rounded-lg px-4 ml-2 justify-center">
+                <Text className="text-white font-semibold">Apply</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          {/* Cart summary */}
+          <View className="bg-gray-50 rounded-lg p-4 mb-4">
+            <Text className="text-base mb-1">Subtotal: <Text className="font-bold">${subtotal.toFixed(2)}</Text></Text>
+            <Text className="text-base mb-1">Shipping: <Text className="font-bold">${shipping.toFixed(2)}</Text></Text>
+            <Text className="text-lg font-bold">Total: ${total.toFixed(2)}</Text>
+          </View>
           <TouchableOpacity
-            className="bg-gray-300 py-3 rounded-lg mt-4"
+            className="bg-green-600 py-4 rounded-lg mb-2"
+            onPress={() => {}}
+          >
+            <Text className="text-center text-white font-semibold text-lg">Checkout</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="bg-gray-300 py-3 rounded-lg mt-2"
             onPress={handleClear}
           >
             <Text className="text-center text-gray-700 font-semibold">Clear Cart</Text>
