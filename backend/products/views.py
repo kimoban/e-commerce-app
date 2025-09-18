@@ -39,10 +39,10 @@ class ProductViewSet(viewsets.ModelViewSet):
 		return queryset
 
 class AsyncProductListView(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+	permission_classes = [IsAuthenticatedOrReadOnly]
 
-    async def get(self, request):
-        # Example async ORM usage (Django 4.1+)
-        products = await Product.objects.all().order_by('-created_at').aget()
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data)
+	async def get(self, request):
+		from asgiref.sync import sync_to_async
+		products = await sync_to_async(list)(Product.objects.all().order_by('-created_at'))
+		serializer = ProductSerializer(products, many=True)
+		return Response(serializer.data)

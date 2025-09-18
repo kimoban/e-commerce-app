@@ -16,7 +16,7 @@ class RegisterUserView(APIView):
             if User.objects.filter(email=email).exists():
                 return Response({'error': 'User with this email already exists.'}, status=status.HTTP_400_BAD_REQUEST)
             user = User.objects.create_user(username=email, email=email, password=password)
-            send_welcome_email.delay(email)
+            send_welcome_email(email)
             return Response({'message': 'User registered and welcome email sent.'}, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
