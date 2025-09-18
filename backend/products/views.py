@@ -2,6 +2,8 @@ from rest_framework import viewsets, filters
 from .models import Product, Category
 from .serializers import ProductSerializer, CategorySerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 class CategoryViewSet(viewsets.ModelViewSet):
 	queryset = Category.objects.all().order_by('name')
@@ -31,3 +33,12 @@ class ProductViewSet(viewsets.ModelViewSet):
 		if max_price:
 			queryset = queryset.filter(price__lte=max_price)
 		return queryset
+
+class AsyncProductListView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    async def get(self, request):
+        # Example async ORM usage (Django 4.1+)
+        products = await Product.objects.all().order_by('-created_at').aget()
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
