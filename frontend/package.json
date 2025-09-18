@@ -10,7 +10,7 @@
     "test": "jest",
     "test:coverage": "jest --coverage"
   ,
-    "vercel-build": "expo build:web"
+  "vercel-build": "npx expo export:web"
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^7.4.7",
