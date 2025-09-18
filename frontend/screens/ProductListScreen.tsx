@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { AccessibilityRole } from 'react-native';
 import Animated, { FadeIn, FadeOut, Layout } from 'react-native-reanimated';
 import { useQuery } from '@tanstack/react-query';
@@ -31,6 +32,7 @@ const PAGE_SIZE = 10;
 
 const ProductListScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [sort, setSort] = useState<'price_asc' | 'price_desc'>('price_asc');
   const [viewType, setViewType] = useState<'grid' | 'list'>('grid');
@@ -47,13 +49,11 @@ const ProductListScreen = () => {
     return response.json();
   };
 
-  const { data, error, isLoading, refetch } = useQuery<{ results: Product[]; next?: string }>(
-    ['products', page, selectedCategory, sort],
-    fetchProducts,
-    {
-      keepPreviousData: true,
-    }
-  );
+  const { data, error, isLoading, refetch } = useQuery<{ results: Product[]; next?: string }>({
+    queryKey: ['products', page, selectedCategory, sort],
+    queryFn: fetchProducts,
+    placeholderData: { results: [], next: undefined },
+  });
 
   const handleLoadMore = () => {
     const paged = data as { results?: Product[]; next?: string };
@@ -85,7 +85,7 @@ const ProductListScreen = () => {
             accessibilityLabel="Sort by price low to high"
             testID="sort-low-high"
           >
-            <Text className={sort === 'price_asc' ? 'text-white font-semibold' : 'text-gray-700'}>Price: Low-High</Text>
+            <Text className={sort === 'price_asc' ? 'text-white font-semibold' : 'text-gray-700'}>{t('sort_low_high')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             className={`px-4 py-2 mr-2 rounded-full border ${sort === 'price_desc' ? 'bg-blue-600 border-blue-600' : 'bg-white border-gray-300'}`}
@@ -94,7 +94,7 @@ const ProductListScreen = () => {
             accessibilityLabel="Sort by price high to low"
             testID="sort-high-low"
           >
-            <Text className={sort === 'price_desc' ? 'text-white font-semibold' : 'text-gray-700'}>Price: High-Low</Text>
+            <Text className={sort === 'price_desc' ? 'text-white font-semibold' : 'text-gray-700'}>{t('sort_high_low')}</Text>
           </TouchableOpacity>
         </View>
         <View className="flex-row">
@@ -105,7 +105,7 @@ const ProductListScreen = () => {
             accessibilityLabel="Grid view"
             testID="view-grid"
           >
-            <Text className={viewType === 'grid' ? 'text-white font-semibold' : 'text-gray-700'}>Grid</Text>
+            <Text className={viewType === 'grid' ? 'text-white font-semibold' : 'text-gray-700'}>{t('grid')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             className={`ml-2 px-3 py-2 rounded border ${viewType === 'list' ? 'bg-blue-600 border-blue-600' : 'bg-white border-gray-300'}`}
@@ -114,22 +114,22 @@ const ProductListScreen = () => {
             accessibilityLabel="List view"
             testID="view-list"
           >
-            <Text className={viewType === 'list' ? 'text-white font-semibold' : 'text-gray-700'}>List</Text>
+            <Text className={viewType === 'list' ? 'text-white font-semibold' : 'text-gray-700'}>{t('list')}</Text>
           </TouchableOpacity>
         </View>
       </View>
       {/* Product count display */}
-  <Text className="mb-2 text-gray-600">{Array.isArray((data as any)?.results) ? (data as any).results.length : 0} products found</Text>
+  <Text className="mb-2 text-gray-600">{t('products_found', { count: Array.isArray((data as any)?.results) ? (data as any).results.length : 0 })}</Text>
       {error ? (
         <View className="flex-1 items-center justify-center">
-          <Text className="text-red-500 text-base mb-4">{error.message || 'Error loading products'}</Text>
+          <Text className="text-red-500 text-base mb-4">{error.message || t('error_loading')}</Text>
           <TouchableOpacity
             className="bg-blue-600 px-4 py-2 rounded"
             onPress={() => refetch()}
             accessibilityRole="button"
             accessibilityLabel="Retry"
           >
-            <Text className="text-white font-semibold">Retry</Text>
+            <Text className="text-white font-semibold">{t('retry')}</Text>
           </TouchableOpacity>
         </View>
   ) : isLoading && (!Array.isArray((data as any)?.results) || (data as any).results.length === 0) ? (
@@ -140,7 +140,7 @@ const ProductListScreen = () => {
         </View>
   ) : !Array.isArray((data as any)?.results) || (data as any).results.length === 0 ? (
         <View className="flex-1 items-center justify-center mt-16">
-          <Text className="text-gray-500 text-base mb-4">No products found.</Text>
+          <Text className="text-gray-500 text-base mb-4">{t('no_products')}</Text>
           <View className="bg-gray-100 rounded-full w-32 h-32 items-center justify-center">
             <Text className="text-gray-400">📦</Text>
           </View>
@@ -174,7 +174,7 @@ const ProductListScreen = () => {
                 accessibilityLabel={`Quick add ${item.name} to cart`}
                 testID={`quick-add-${item.id}`}
               >
-                <Text className="text-white font-semibold">Quick Add to Cart</Text>
+                <Text className="text-white font-semibold">{t('quick_add')}</Text>
               </TouchableOpacity>
             </Animated.View>
           )}
