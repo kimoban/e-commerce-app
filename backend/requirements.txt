@@ -12,4 +12,3 @@ django-extensions
 sentry-sdk
 django-cors-headers
 django-filter
-django-redis
