@@ -56,4 +56,37 @@ if __name__ == "__main__":
     token = test_login()
     test_products(token)
     test_categories(token)
+
+    # 6. Cart API
+    def test_cart(token):
+        headers = {"Authorization": f"Bearer {token}"}
+        r = requests.get(f"{BASE_URL}/api/cart/", headers=headers)
+        assert r.status_code == 200, f"Cart list failed: {r.text}"
+        print("Cart list: PASSED")
+
+    # 7. Orders API
+    def test_orders(token):
+        headers = {"Authorization": f"Bearer {token}"}
+        r = requests.get(f"{BASE_URL}/api/orders/", headers=headers)
+        assert r.status_code == 200, f"Orders list failed: {r.text}"
+        print("Orders list: PASSED")
+
+    # 8. Reviews API
+    def test_reviews(token):
+        headers = {"Authorization": f"Bearer {token}"}
+        r = requests.get(f"{BASE_URL}/api/reviews/", headers=headers)
+        assert r.status_code == 200, f"Reviews list failed: {r.text}"
+        print("Reviews list: PASSED")
+
+    # 9. Email Notification
+    def test_email_notification(token):
+        headers = {"Authorization": f"Bearer {token}"}
+        r = requests.post(f"{BASE_URL}/api/email/notify/", headers=headers, json={"email": "testuser2025@example.com"})
+        assert r.status_code in [200, 202], f"Email notification failed: {r.text}"
+        print("Email notification: PASSED")
+
+    test_cart(token)
+    test_orders(token)
+    test_reviews(token)
+    test_email_notification(token)
     print("All endpoint tests completed!")
