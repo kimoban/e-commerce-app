@@ -4,7 +4,6 @@ from rest_framework import status
 from .tasks import send_welcome_email
 
 class RegisterUserView(APIView):
-    permission_classes = []
     from rest_framework.permissions import AllowAny
     permission_classes = [AllowAny]
     def post(self, request):
