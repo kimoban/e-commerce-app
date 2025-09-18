@@ -5,3 +5,4 @@ djangorestframework-simplejwt
 drf-yasg
 dj-database-url
 gunicorn
+whitenoise
