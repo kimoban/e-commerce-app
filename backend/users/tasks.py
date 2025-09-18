@@ -10,3 +10,23 @@ def send_welcome_email(user_email):
         [user_email],
         fail_silently=False,
     )
+
+@shared_task
+def process_order(order_id):
+    # Simulate order processing logic
+    from products.models import Order
+    try:
+        order = Order.objects.get(id=order_id)
+        # Example: update status, send confirmation, etc.
+        order.status = 'processed'
+        order.save()
+        send_mail(
+            'Order Processed',
+            f'Your order #{order_id} has been processed.',
+            'noreply@ecommerce.com',
+            [order.user.email],
+            fail_silently=True,
+        )
+    except Exception as e:
+        # Log error or send notification
+        pass
