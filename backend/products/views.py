@@ -4,6 +4,8 @@ from .serializers import ProductSerializer, CategorySerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+from django_filters.rest_framework import DjangoFilterBackend
 
 class CategoryViewSet(viewsets.ModelViewSet):
 	queryset = Category.objects.all().order_by('name')
@@ -17,10 +19,12 @@ class ProductViewSet(viewsets.ModelViewSet):
 	queryset = Product.objects.all().order_by('-created_at')
 	serializer_class = ProductSerializer
 	permission_classes = [IsAuthenticatedOrReadOnly]
-	filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+	filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+	filterset_fields = ['category', 'brand', 'is_active', 'price']
 	search_fields = ['name', 'description', 'brand']
 	ordering_fields = ['price', 'created_at', 'rating', 'stock']
 	ordering = ['-created_at']
+	throttle_classes = [UserRateThrottle, AnonRateThrottle]
 	def get_queryset(self):
 		queryset = super().get_queryset()
 		category = self.request.query_params.get('category')
