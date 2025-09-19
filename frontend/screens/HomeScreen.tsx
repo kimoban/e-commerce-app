@@ -58,8 +58,8 @@ const HomeScreen = () => {
           />
         </View>
       </View>
-      {/* Categories Bar with Icons */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} className="px-6 mb-6">
+      {/* Categories Bar with Icons - Vertical Layout for Web */}
+      <View className="px-6 mb-6">
         {[
           { name: 'Electronics', icon: <MaterialIcons name="devices" size={20} color="#232F3E" /> },
           { name: 'Fashion', icon: <FontAwesome5 name="tshirt" size={18} color="#232F3E" /> },
@@ -70,7 +70,7 @@ const HomeScreen = () => {
         ].map((cat) => (
           <TouchableOpacity
             key={cat.name}
-            className="bg-orange-100 rounded-full px-5 py-2 mr-3 flex-row items-center shadow-sm"
+            className="bg-orange-100 rounded-full px-5 py-2 mb-3 flex-row items-center shadow-sm"
             activeOpacity={0.7}
             style={{ transform: [{ scale: 1 }], borderWidth: 1, borderColor: '#FF9900' }}
           >
@@ -78,7 +78,7 @@ const HomeScreen = () => {
             <Text className="text-orange-700 font-medium ml-2">{cat.name}</Text>
           </TouchableOpacity>
         ))}
-      </ScrollView>
+      </View>
       {/* Featured Products Card Layout Placeholder */}
       <Animated.View style={{ opacity: cardAnim }}>
         <View className="px-6 mb-8">
