@@ -2,16 +2,28 @@ import React, { useRef, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, Animated } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 // Update the import path if your store file is located elsewhere, for example:
-import type { RootState } from '../store/store';
-// Or, if your store file is named 'store.ts' and located in the same directory:
-import type { RootState } from '../store/store';
+import type { RootState } from './store';
 // If the file does not exist, create 'store.ts' or 'store/index.ts' and export RootState from there.
-import { removeFromCart, updateQuantity, clearCart } from '../store/cartSlice';
+// Update the import path below if your cartSlice file is located elsewhere, e.g. '../features/cart/cartSlice'
+import { removeFromCart, updateQuantity, clearCart } from './src/store/cartSlice';
+// If '../store/cartSlice' does not exist, create it and export the actions like:
+// export const removeFromCart = createAction<number>('cart/removeFromCart');
+// export const updateQuantity = createAction<{id: number, quantity: number}>('cart/updateQuantity');
+// export const clearCart = createAction('cart/clearCart');
 import { MaterialIcons } from '@expo/vector-icons';
 
 
+type CartItem = {
+  id: number;
+  name: string;
+  brand?: string;
+  price: number;
+  quantity: number;
+  image?: string;
+};
+
 const CartScreen = () => {
-  const cart = useSelector((state: RootState) => state.cart.items);
+  const cart = useSelector((state: RootState) => state.cart.items as CartItem[]);
   const dispatch = useDispatch();
 
   // Animation refs
@@ -29,7 +41,7 @@ const CartScreen = () => {
   const handleClear = () => dispatch(clearCart());
 
   // Calculate subtotal
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const subtotal = cart.reduce((sum: number, item) => sum + item.price * item.quantity, 0);
   const shipping = cart.length > 0 ? 5.99 : 0;
   const total = subtotal + shipping;
 

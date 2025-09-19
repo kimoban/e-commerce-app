@@ -1,6 +1,7 @@
 // Simple service worker for Expo web PWA
 self.addEventListener('install', event => {
-  self.skipWaiting();
+  // Use event to avoid lint warning
+  event.waitUntil(Promise.resolve(self.skipWaiting()));
 });
 
 self.addEventListener('activate', event => {
