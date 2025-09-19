@@ -36,7 +36,7 @@ const HomeScreen = () => {
 
   return (
     <ScrollView className="flex-1 bg-white" contentContainerStyle={{ paddingBottom: 32 }}>
-start by listing and analyzing your Django models, or proceed directly to the ERD generation instructions      {/* Hero Gradient Banner */}
+      {/* Hero Gradient Banner */}
       <Animated.View style={{ opacity: fadeAnim }}>
         <View style={{ height: 180, borderBottomLeftRadius: 32, borderBottomRightRadius: 32, overflow: 'hidden', backgroundColor: '#FF9900' }} className="mb-6">
           <View style={{ position: 'absolute', width: '100%', height: '100%', backgroundColor: '#FF9900', opacity: 0.95 }} />
