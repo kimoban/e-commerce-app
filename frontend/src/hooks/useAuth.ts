@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
-import { login, logout } from '../store/authSlice';
+import { loginStart, loginSuccess, loginFailure, logout } from '../store/authSlice';
 
 export function useAuth() {
   const dispatch = useDispatch();
@@ -11,7 +11,19 @@ export function useAuth() {
     loading,
     error,
     token,
-    login: (username: string, password: string) => dispatch(login({ username, password })),
+    login: (username: string, password: string) => {
+      dispatch(loginStart());
+      // In a real implementation, you would call an API here
+      // For now, we'll simulate a successful login
+      try {
+        dispatch(loginSuccess({
+          token: 'fake-token',
+          user: { id: 1, username }
+        }));
+      } catch (error) {
+        dispatch(loginFailure(error instanceof Error ? error.message : 'Unknown error'));
+      }
+    },
     logout: () => dispatch(logout()),
   };
 }

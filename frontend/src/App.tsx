@@ -2,9 +2,9 @@
 
 import { StatusBar } from 'expo-status-bar';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import './i18n';
+import '../i18n';
 import { I18nextProvider } from 'react-i18next';
-import i18n from './i18n';
+import i18n from '../i18n';
 import ReduxProvider from './store/ReduxProvider';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
