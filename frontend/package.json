@@ -27,7 +27,7 @@
   "test:coverage": "jest --coverage",
   
     
-  "vercel-build": "mkdir -p dist && echo '<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>E-Commerce App</title><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><style>body{font-family:system-ui,-apple-system,sans-serif;max-width:800px;margin:0 auto;padding:20px;}h1{color:#333;}p{line-height:1.6;}</style></head><body><h1>E-Commerce App</h1><p>This is a placeholder for the E-Commerce mobile app. The app is designed for native mobile platforms using React Native and Expo.</p><p>To try out the app:</p><ol><li>Download Expo Go from your app store</li><li>Scan the QR code from our GitHub repository</li><li>Explore the full native experience</li></ol><p>© 2025 Isaiah Kimoban</p></body></html>' > dist/index.html"
+  "vercel-build": "node vercel-build.js"
   
   },
   
