@@ -60,9 +60,20 @@ const HomeScreen = () => {
       </View>
       {/* Categories Bar with Icons - Vertical Layout for Web */}
       <View className="px-6 mb-6">
-        {[
-          { name: 'Electronics', icon: <MaterialIcons name="devices" size={20} color="#232F3E" /> },
-          { name: 'Fashion', icon: <FontAwesome5 name="tshirt" size={18} color="#232F3E" /> },
+        {/* Electronics Section with Images */}
+        <View className="bg-orange-100 rounded-xl px-5 py-4 mb-3 flex-col items-start shadow-sm" style={{ borderWidth: 1, borderColor: '#FF9900' }}>
+          <View className="flex-row items-center mb-2">
+            <MaterialIcons name="devices" size={20} color="#232F3E" />
+            <Text className="text-orange-700 font-medium ml-2 text-lg">Electronics</Text>
+          </View>
+          <View className="flex-row">
+            <Image source={require('../assets/images/Computer.png')} style={{ width: 48, height: 48, marginRight: 12 }} />
+            <Image source={require('../assets/images/headphone.png')} style={{ width: 48, height: 48, marginRight: 12 }} />
+            <Image source={require('../assets/images/Smart Watch.jpg')} style={{ width: 48, height: 48 }} />
+          </View>
+        </View>
+        {/* Other Categories */}
+        {[{ name: 'Fashion', icon: <FontAwesome5 name="tshirt" size={18} color="#232F3E" /> },
           { name: 'Home', icon: <MaterialIcons name="home" size={20} color="#232F3E" /> },
           { name: 'Beauty', icon: <MaterialIcons name="spa" size={20} color="#232F3E" /> },
           { name: 'Sports', icon: <MaterialIcons name="sports-soccer" size={20} color="#232F3E" /> },
@@ -78,6 +89,11 @@ const HomeScreen = () => {
             <Text className="text-orange-700 font-medium ml-2">{cat.name}</Text>
           </TouchableOpacity>
         ))}
+        {/* Social Icons Section */}
+        <View className="flex-row items-center mt-4">
+          <Image source={require('../assets/images/facebook.png')} style={{ width: 32, height: 32, marginRight: 16 }} />
+          <Image source={require('../assets/images/google.png')} style={{ width: 32, height: 32 }} />
+        </View>
       </View>
       {/* Featured Products Card Layout Placeholder */}
       <Animated.View style={{ opacity: cardAnim }}>
