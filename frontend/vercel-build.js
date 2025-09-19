@@ -1,14 +1,37 @@
-// Source code showcase script for Vercel deployment
+// Build script for Expo web deployment on Vercel
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-console.log('Starting E-Commerce source code showcase build...');
+console.log('Starting Expo Web build for Vercel deployment...');
 
-// Create dist directory if it doesn't exist
-if (!fs.existsSync('dist')) {
-  fs.mkdirSync('dist', { recursive: true });
-}
+try {
+  // Install any missing dependencies that might be needed for web build
+  console.log('Installing necessary dependencies...');
+  execSync('npm install --legacy-peer-deps', { stdio: 'inherit' });
+
+  // Create necessary webpack config for Expo web
+  console.log('Creating webpack config for Expo web...');
+  const webpackConfig = `
+  const createExpoWebpackConfigAsync = require('@expo/webpack-config');
+  
+  module.exports = async function(env, argv) {
+    const config = await createExpoWebpackConfigAsync({
+      ...env,
+      babel: {
+        dangerouslyAddModulePathsToTranspile: ['nativewind']
+      }
+    }, argv);
+    return config;
+  };
+  `;
+  
+  fs.writeFileSync('webpack.config.js', webpackConfig);
+
+  // Create dist directory if it doesn't exist
+  if (!fs.existsSync('dist')) {
+    fs.mkdirSync('dist', { recursive: true });
+  }
 
 // Function to recursively get all files in directory
 function getAllFiles(dirPath, arrayOfFiles = []) {
