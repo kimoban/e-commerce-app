@@ -27,7 +27,7 @@
   "test:coverage": "jest --coverage",
   
     
-  "vercel-build": "node vercel-build.js"
+  "vercel-build": "node vercel-build-expo-web.js"
   
   },
   
