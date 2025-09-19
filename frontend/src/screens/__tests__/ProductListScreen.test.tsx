@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import ProductListScreen from '../ProductListScreen';
@@ -17,7 +16,6 @@ describe('ProductListScreen', () => {
         </QueryClientProvider>
       </I18nextProvider>
     );
-
     // Loading skeletons
     expect(getByText(/products found/i)).toBeTruthy();
     await waitFor(() => {
@@ -36,7 +34,6 @@ describe('ProductListScreen', () => {
         </QueryClientProvider>
       </I18nextProvider>
     );
-
     await waitFor(() => {
       expect(getByText(/error loading products/i)).toBeTruthy();
     });

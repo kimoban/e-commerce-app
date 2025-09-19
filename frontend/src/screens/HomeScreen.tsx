@@ -41,7 +41,7 @@ const HomeScreen = () => {
         <View style={{ height: 180, borderBottomLeftRadius: 32, borderBottomRightRadius: 32, overflow: 'hidden', backgroundColor: '#FF9900' }} className="mb-6">
           <View style={{ position: 'absolute', width: '100%', height: '100%', backgroundColor: '#FF9900', opacity: 0.95 }} />
           <View className="flex-1 justify-center items-center">
-            <Text style={{ color: '#fff', fontSize: 28, fontWeight: 'bold', marginBottom: 8, marginTop: 32 }}>E-Com Shop</Text>
+            <Text className="text-white text-3xl font-bold mb-2 mt-8">E-Com Shop</Text>
             <Text className="text-white text-base mb-2">Find your favorite products</Text>
             <Image source={{ uri: 'https://img.icons8.com/color/96/000000/shopping-cart.png' }} style={{ width: 48, height: 48 }} />
           </View>

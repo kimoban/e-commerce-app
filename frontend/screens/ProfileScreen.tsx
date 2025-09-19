@@ -1,7 +1,12 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+// Update the import path if your store file is located elsewhere, for example:
+// Update the import path if your store file is located elsewhere, for example:
+// import { RootState } from '../store/store';
+// Or, if your store file is named 'store.ts' in the same directory:
 import { RootState } from '../store';
+// Make sure '../store' exists and exports RootState.
 import { logout } from '../store/authSlice';
 
 
@@ -15,48 +20,158 @@ const ProfileScreen = () => {
   };
 
   return (
-    <View className="flex-1 items-center justify-center bg-white px-6">
-      <Text className="text-2xl font-bold mb-4">Profile</Text>
+    <View style={styles.container}>
+      <Text style={styles.profileTitle}>Profile</Text>
       {user ? (
         <>
           {/* Avatar and Edit Profile */}
-          <View className="items-center mb-4">
-            <View className="bg-gray-200 rounded-full w-20 h-20 items-center justify-center mb-2">
-              <Text className="text-3xl text-gray-500">👤</Text>
+          <View style={styles.avatarSection}>
+            <View style={styles.avatarCircle}>
+              <Text style={styles.avatarIcon}>👤</Text>
             </View>
-            <TouchableOpacity className="bg-blue-100 px-4 py-2 rounded-full mb-2">
-              <Text className="text-blue-700 font-medium">Edit Profile</Text>
+            <TouchableOpacity style={styles.editProfileButton}>
+              <Text style={styles.editProfileText}>Edit Profile</Text>
             </TouchableOpacity>
           </View>
-          <Text className="text-base mb-2">Username: <Text className="font-semibold">{user.username}</Text></Text>
+          <Text style={styles.usernameText}>Username: <Text style={styles.usernameBold}>{user.username}</Text></Text>
           {/* Address management */}
-          <TouchableOpacity className="bg-green-100 px-4 py-2 rounded-full mb-4">
-            <Text className="text-green-700 font-medium">Manage Addresses</Text>
+          <TouchableOpacity style={styles.manageAddressButton}>
+            <Text style={styles.manageAddressText}>Manage Addresses</Text>
           </TouchableOpacity>
           {/* Order history placeholder */}
-          <View className="w-full mb-4">
-            <Text className="text-lg font-bold mb-2">Order History</Text>
-            <View className="bg-gray-100 rounded-lg h-16 items-center justify-center">
-              <Text className="text-gray-400">[Order history coming soon]</Text>
+          <View style={styles.orderHistorySection}>
+            <Text style={styles.orderHistoryTitle}>Order History</Text>
+            <View style={styles.orderHistoryPlaceholder}>
+              <Text style={styles.orderHistoryPlaceholderText}>[Order history coming soon]</Text>
             </View>
           </View>
           <TouchableOpacity
-            className="bg-blue-600 py-3 px-8 rounded mt-2"
+            style={styles.logoutButton}
             onPress={handleLogout}
           >
-            <Text className="text-white font-semibold">Logout</Text>
+            <Text style={styles.logoutButtonText}>Logout</Text>
           </TouchableOpacity>
         </>
       ) : (
-        <View className="items-center">
-          <View className="bg-gray-100 rounded-full w-20 h-20 items-center justify-center mb-2">
-            <Text className="text-3xl text-gray-400">👤</Text>
+        <View style={styles.notLoggedInSection}>
+          <View style={styles.notLoggedInAvatar}>
+            <Text style={styles.notLoggedInAvatarIcon}>👤</Text>
           </View>
-          <Text className="text-gray-500">Not logged in.</Text>
+          <Text style={styles.notLoggedInText}>Not logged in.</Text>
         </View>
       )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    paddingHorizontal: 24,
+  },
+  profileTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  avatarSection: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  avatarCircle: {
+    backgroundColor: '#e5e7eb',
+    borderRadius: 40,
+    width: 80,
+    height: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
+  },
+  avatarIcon: {
+    fontSize: 32,
+    color: '#6b7280',
+  },
+  editProfileButton: {
+    backgroundColor: '#dbeafe',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 9999,
+    marginBottom: 8,
+  },
+  editProfileText: {
+    color: '#1d4ed8',
+    fontWeight: '500',
+  },
+  usernameText: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  usernameBold: {
+    fontWeight: '600',
+  },
+  manageAddressButton: {
+    backgroundColor: '#bbf7d0',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 9999,
+    marginBottom: 16,
+  },
+  manageAddressText: {
+    color: '#047857',
+    fontWeight: '500',
+  },
+  orderHistorySection: {
+    width: '100%',
+    marginBottom: 16,
+  },
+  orderHistoryTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  orderHistoryPlaceholder: {
+    backgroundColor: '#f3f4f6',
+    borderRadius: 12,
+    height: 64,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  orderHistoryPlaceholderText: {
+    color: '#9ca3af',
+  },
+  logoutButton: {
+    backgroundColor: '#2563eb',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 8,
+    marginTop: 8,
+  },
+  logoutButtonText: {
+    color: '#fff',
+    fontWeight: '600',
+  },
+  notLoggedInSection: {
+    alignItems: 'center',
+  },
+  notLoggedInAvatar: {
+    backgroundColor: '#f3f4f6',
+    borderRadius: 40,
+    width: 80,
+    height: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
+  },
+  notLoggedInAvatarIcon: {
+    fontSize: 32,
+    color: '#9ca3af',
+  },
+  notLoggedInText: {
+    color: '#6b7280',
+  },
+});
 
 export default ProfileScreen;

@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 export default function TailwindSmoke() {
   return (
     <View className="p-4">
-      <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#2563eb' }}>Tailwind is working</Text>
+      <Text className="text-2xl font-bold text-blue-600">Tailwind is working</Text>
       <View className="mt-3 h-4 w-full bg-gray-200 rounded">
         <View className="h-4 w-1/2 bg-green-500 rounded" />
       </View>

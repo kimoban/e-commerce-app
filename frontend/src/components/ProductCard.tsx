@@ -64,7 +64,7 @@ export default function ProductCard({ product, onPress, loading, accessibilityLa
               <>
                 <Text className="text-base font-semibold text-gray-900 mb-1" accessibilityLabel={`Product name: ${product?.name}`}>{product?.name}</Text>
                 {product?.brand && (
-                  <Text style={{ fontSize: 12, color: '#6B7280', marginBottom: 4 }} accessibilityLabel={`Brand: ${product.brand}`}>{product.brand}</Text>
+                  <Text className="text-xs text-gray-500 mb-1" accessibilityLabel={`Brand: ${product.brand}`}>{product.brand}</Text>
                 )}
                 <Text className="text-base font-bold text-blue-600" accessibilityLabel={`Price: $${product?.price}`}>${product?.price}</Text>
               </>

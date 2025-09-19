@@ -67,7 +67,7 @@ const ProductListScreen = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F9FAFB', paddingHorizontal: 8, paddingTop: 8 }}>
+    <View className="flex-1 bg-gray-50 px-2 pt-2">
       <CategoryFilterBar
         selected={selectedCategory}
         onSelect={id => { setSelectedCategory(id); setPage(1); }}

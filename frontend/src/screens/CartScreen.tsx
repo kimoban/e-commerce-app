@@ -1,11 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, Animated } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-// Update the import path if your store file is located elsewhere, for example:
-import type { RootState } from '../store/store';
-// Or, if your store file is named 'store.ts' and located in the same directory:
-import type { RootState } from '../store/store';
-// If the file does not exist, create 'store.ts' or 'store/index.ts' and export RootState from there.
+import type { RootState } from '../store';
 import { removeFromCart, updateQuantity, clearCart } from '../store/cartSlice';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -100,7 +96,7 @@ const CartScreen = () => {
             />
             {/* Discount code input placeholder */}
             <View className="mt-4 mb-2">
-              <Text style={{ fontSize: 16, fontWeight: '500', marginBottom: 8, color: '#1a202c' }}>Discount Code</Text>
+              <Text className="text-base font-medium mb-2 text-gray-900">Discount Code</Text>
               <View className="flex-row">
                 <View className="flex-1">
                   <View className="bg-gray-100 rounded-lg px-3 py-2">
