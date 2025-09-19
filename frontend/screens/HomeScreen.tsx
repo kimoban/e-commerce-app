@@ -66,18 +66,28 @@ const HomeScreen = () => {
             <MaterialIcons name="devices" size={20} color="#232F3E" />
             <Text className="text-orange-700 font-medium ml-2 text-lg">Electronics</Text>
           </View>
-          <View className="flex-row items-center">
-            <View style={{ alignItems: 'center', marginRight: 24 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              flexWrap: 'wrap',
+              gap: 32,
+              marginBottom: 16,
+            }}
+          >
+            <View style={{ alignItems: 'center', width: 100 }}>
               <Image source={require('../assets/images/Computer.png')} style={{ width: 48, height: 48 }} />
-              <Text className="text-xs text-gray-700 mt-2">Computer</Text>
+              <Text style={{ fontSize: 12, color: '#374151', marginTop: 8 }}>Computer</Text>
             </View>
-            <View style={{ alignItems: 'center', marginRight: 24 }}>
+            <View style={{ alignItems: 'center', width: 100 }}>
               <Image source={require('../assets/images/headphone.png')} style={{ width: 48, height: 48 }} />
-              <Text className="text-xs text-gray-700 mt-2">Headphones</Text>
+              <Text style={{ fontSize: 12, color: '#374151', marginTop: 8 }}>Headphones</Text>
             </View>
-            <View style={{ alignItems: 'center' }}>
+            <View style={{ alignItems: 'center', width: 100 }}>
               <Image source={require('../assets/images/Smart Watch.jpg')} style={{ width: 48, height: 48 }} />
-              <Text className="text-xs text-gray-700 mt-2">Smart Watch</Text>
+              <Text style={{ fontSize: 12, color: '#374151', marginTop: 8 }}>Smart Watch</Text>
             </View>
           </View>
         </View>
