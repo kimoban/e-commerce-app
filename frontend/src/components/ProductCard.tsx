@@ -1,10 +1,11 @@
+/// <reference types="nativewind/types" />
 
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import Animated, { FadeIn, FadeOut, Layout } from 'react-native-reanimated';
-import Skeleton from './Skeleton';
+import Skeleton from '@components/Skeleton';
 
-
+import type { AccessibilityRole } from 'react-native';
 
 type ProductCardProps = {
   product?: {
@@ -17,8 +18,6 @@ type ProductCardProps = {
   loading?: boolean;
 };
 
-import type { AccessibilityRole } from 'react-native';
-
 export default function ProductCard({ product, onPress, loading, accessibilityLabel, accessibilityRole, testID }: ProductCardProps & {
   accessibilityLabel?: string;
   accessibilityRole?: AccessibilityRole;
@@ -30,7 +29,7 @@ export default function ProductCard({ product, onPress, loading, accessibilityLa
       exiting={FadeOut.duration(300)}
       layout={Layout.springify()}
       accessibilityLabel={accessibilityLabel}
-  accessibilityRole={accessibilityRole}
+      accessibilityRole={accessibilityRole}
       testID={testID}
     >
       <TouchableOpacity
@@ -38,7 +37,7 @@ export default function ProductCard({ product, onPress, loading, accessibilityLa
         onPress={onPress}
         className="w-full mb-3"
         accessibilityLabel={accessibilityLabel}
-  accessibilityRole={accessibilityRole ?? 'button'}
+        accessibilityRole={accessibilityRole ?? 'button'}
         testID={testID}
       >
         <View className="flex-row bg-white rounded-lg shadow-lg elevation-3 p-3 items-center">
@@ -64,7 +63,7 @@ export default function ProductCard({ product, onPress, loading, accessibilityLa
               <>
                 <Text className="text-base font-semibold text-gray-900 mb-1" accessibilityLabel={`Product name: ${product?.name}`}>{product?.name}</Text>
                 {product?.brand && (
-                  <Text className="text-xs text-gray-500 mb-1" accessibilityLabel={`Brand: ${product.brand}`}>{product.brand}</Text>
+                  <Text style={{ fontSize: 12, color: '#6B7280', marginBottom: 4 }} accessibilityLabel={`Brand: ${product.brand}`}>{product.brand}</Text>
                 )}
                 <Text className="text-base font-bold text-blue-600" accessibilityLabel={`Price: $${product?.price}`}>${product?.price}</Text>
               </>

@@ -1,3 +1,5 @@
+/// <reference types="nativewind/types" />
+
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { AccessibilityRole } from 'react-native';
@@ -5,9 +7,9 @@ import Animated, { FadeIn, FadeOut, Layout } from 'react-native-reanimated';
 import { useQuery } from '@tanstack/react-query';
 import { View, Text, ActivityIndicator, FlatList, RefreshControl, TouchableOpacity } from 'react-native';
 // Removed styled import, using className prop
-import ProductCard from '../components/ProductCard';
-import Skeleton from '../components/Skeleton';
-import CategoryFilterBar from '../components/CategoryFilterBar';
+import ProductCard from '@components/ProductCard';
+import Skeleton from '@components/Skeleton';
+import CategoryFilterBar from '@components/CategoryFilterBar';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store';
-import { logout } from '../store/authSlice';
+import { RootState } from '@store/index';
+import { logout } from '@store/authSlice';
 
 
 const ProfileScreen = () => {

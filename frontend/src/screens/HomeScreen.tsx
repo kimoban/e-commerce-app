@@ -1,11 +1,10 @@
+/// <reference types="nativewind/types" />
 
 import React, { useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView, Image, Animated } from 'react-native';
 import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
-import TailwindSmoke from '../components/TailwindSmoke';
+import TailwindSmoke from '@components/TailwindSmoke';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-
-
 
 type RootStackParamList = {
   Home: undefined;

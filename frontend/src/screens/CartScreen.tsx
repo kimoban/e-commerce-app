@@ -1,8 +1,9 @@
+/// <reference types="nativewind/types" />
 import React, { useRef, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, Animated } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import type { RootState } from '../store';
-import { removeFromCart, updateQuantity, clearCart } from '../store/cartSlice';
+import type { RootState } from '@store/index';
+import { removeFromCart, updateQuantity, clearCart } from '@store/cartSlice';
 import { MaterialIcons } from '@expo/vector-icons';
 
 
