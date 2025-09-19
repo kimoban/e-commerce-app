@@ -25,8 +25,8 @@ const CartScreen = () => {
   const handleQuantity = (id: number, quantity: number) => dispatch(updateQuantity({ id, quantity }));
   const handleClear = () => dispatch(clearCart());
 
-  // Calculate subtotal
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  // Calculate subtotal with explicit types for the reduce function
+  const subtotal = cart.reduce<number>((sum: number, item) => sum + item.price * item.quantity, 0);
   const shipping = cart.length > 0 ? 5.99 : 0;
   const total = subtotal + shipping;
 
