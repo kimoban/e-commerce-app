@@ -35,7 +35,7 @@ const HomeScreen = () => {
   }, []);
 
   return (
-    <ScrollView className="flex-1 bg-white" contentContainerStyle={{ paddingBottom: 32 }}>
+    <ScrollView className="flex-1" style={{ backgroundColor: '#ADD8E6' }} contentContainerStyle={{ paddingBottom: 32 }}>
       {/* Hero Gradient Banner */}
       <Animated.View style={{ opacity: fadeAnim }}>
         <View style={{ height: 180, borderBottomLeftRadius: 32, borderBottomRightRadius: 32, overflow: 'hidden', backgroundColor: '#FF9900' }} className="mb-6">
