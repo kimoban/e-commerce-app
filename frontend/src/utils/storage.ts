@@ -1,0 +1,2 @@
+// AsyncStorage helpers
+export default {}
