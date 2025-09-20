@@ -24,10 +24,9 @@
   "test": "jest",
   
     
-  "test:coverage": "jest --coverage",
+  "test:coverage": "jest --coverage"
   
     
-  "vercel-build": "npx expo export:web && rmdir /s /q dist && ren web-build dist"
   
   },
   
