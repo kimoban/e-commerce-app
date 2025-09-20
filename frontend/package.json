@@ -27,7 +27,7 @@
   "test:coverage": "jest --coverage",
   
     
-  "vercel-build": "npx expo build:web && rmdir /s /q dist && ren web-build dist"
+  "vercel-build": "npx expo export:web && rmdir /s /q dist && ren web-build dist"
   
   },
   
