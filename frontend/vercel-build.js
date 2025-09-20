@@ -1,4 +1,4 @@
-// Build script for Expo web deployment on Vercel
+// This file has been renamed to prevent accidental execution by Vercel. Use vercel-build-expo-web.js for deployment.
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
