@@ -1,7 +1,8 @@
 import { ProductsState } from '@store/productsSlice';
-import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Button } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, Button, ActivityIndicator } from 'react-native';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 // Update the import path if your store file is named differently or located elsewhere
@@ -11,6 +12,7 @@ import ProductCard from '@components/ProductCard';
 import SearchBar from '@components/SearchBar';
 import CategoryFilterBar from '@components/CategoryFilterBar';
 import Banner from '@components/Banner';
+import { loadMoreProducts, loadProducts, setCategory as setCategoryFilter, setSearch as setSearchFilter, setSort as setSortOrder } from '@store/productsSlice';
 
 type RootStackParamList = {
   Home: undefined;
@@ -20,21 +22,32 @@ type RootStackParamList = {
 
 const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const { items, loading, error } = useSelector((state: RootState) => state.products as ProductsState);
+  const { items, loading, error, hasMore } = useSelector((state: RootState) => state.products as ProductsState);
   const user = useSelector((state: RootState) => (state.user as any).user);
   const [search, setSearch] = useState('');
+  const dispatch = useDispatch();
   const [sort, setSort] = useState<'asc' | 'desc'>('asc');
   const [category, setCategory] = useState('All');
 
   // Example categories, replace with dynamic if available
   const categories = ['All', 'Electronics', 'Fashion', 'Home', 'Beauty'];
 
-  const filtered = items
-    .filter((p: any) =>
-      (category === 'All' || p.category === category) &&
-      p.name.toLowerCase().includes(search.toLowerCase())
-    )
-    .sort((a: any, b: any) => sort === 'asc' ? a.price - b.price : b.price - a.price);
+  // Note: filtering and sorting handled by backend/Redux thunks now
+  
+  // Initial load and refresh on filters
+  useEffect(() => {
+    dispatch(setSearchFilter(search));
+    // Don't send 'All' as a category; treat as no filter
+    dispatch(setCategoryFilter(category === 'All' ? '' : category));
+    dispatch(setSortOrder(sort));
+    dispatch<any>(loadProducts());
+  }, [search, category, sort]);
+
+  const onEndReached = () => {
+    if (!loading && hasMore) {
+      dispatch<any>(loadMoreProducts());
+    }
+  };
 
   return (
     <View className="flex-1 bg-white p-4">
@@ -53,17 +66,22 @@ const HomeScreen = () => {
           <Text style={{ color: sort === 'desc' ? '#2563eb' : '#6b7280', fontWeight: 'bold' }}>Price: High to Low</Text>
         </TouchableOpacity>
       </View>
-      {loading ? (
-        <Text>Loading...</Text>
-      ) : error ? (
+      {error ? (
         <Text style={{ color: 'red' }}>{error}</Text>
       ) : (
         <FlatList
-          data={filtered}
+          data={items}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <ProductCard {...item} onPress={() => {}} />
           )}
+          onEndReachedThreshold={0.5}
+          onEndReached={onEndReached}
+          ListFooterComponent={loading ? (
+            <View style={{ paddingVertical: 16 }}>
+              <ActivityIndicator color="#2563eb" />
+            </View>
+          ) : null}
           ListEmptyComponent={<Text>No products found.</Text>}
         />
       )}
