@@ -1,11 +1,34 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+import Button from '../components/Button';
+import { CartState } from '../store/cartSlice';
 
-const CartScreen = () => (
-  <View className="flex-1 items-center justify-center bg-white">
-    <Text className="text-lg font-bold">Cart Screen</Text>
-    {/* Cart items will go here */}
-  </View>
-);
+const CartScreen = () => {
+  const items = useSelector((state: RootState) => (state.cart as CartState).items);
+  const total = items.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
+
+  return (
+    <View style={{ flex: 1, backgroundColor: '#fff', padding: 16 }}>
+      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 8 }}>Cart</Text>
+      <FlatList
+        data={items}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+            <Text style={{ flex: 1 }}>{item.name} x{item.quantity}</Text>
+            <Text style={{ color: '#2563eb', fontWeight: 'bold' }}>${(item.price * item.quantity).toFixed(2)}</Text>
+          </View>
+        )}
+        ListEmptyComponent={<Text>Your cart is empty.</Text>}
+      />
+      <View style={{ marginTop: 16 }}>
+        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Total: ${total.toFixed(2)}</Text>
+        <Button title="Checkout" onPress={() => {}} style={{ marginTop: 12 }} />
+      </View>
+    </View>
+  );
+};
 
 export default CartScreen;
