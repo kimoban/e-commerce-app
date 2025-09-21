@@ -1,23 +1,34 @@
+import { ProductsState } from '../store/productsSlice';
 import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+
 import ProductCard from '../components/ProductCard';
 import SearchBar from '../components/SearchBar';
+import CategoryFilterBar from '../components/CategoryFilterBar';
 
 const HomeScreen = () => {
-  const { items, loading, error } = useSelector((state: RootState) => state.products);
+  const { items, loading, error } = useSelector((state: RootState) => state.products as ProductsState);
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<'asc' | 'desc'>('asc');
+  const [category, setCategory] = useState('All');
+
+  // Example categories, replace with dynamic if available
+  const categories = ['All', 'Electronics', 'Fashion', 'Home', 'Beauty'];
 
   const filtered = items
-    .filter((p: any) => p.name.toLowerCase().includes(search.toLowerCase()))
+    .filter((p: any) =>
+      (category === 'All' || p.category === category) &&
+      p.name.toLowerCase().includes(search.toLowerCase())
+    )
     .sort((a: any, b: any) => sort === 'asc' ? a.price - b.price : b.price - a.price);
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff', padding: 16 }}>
       <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 8 }}>Products</Text>
       <SearchBar value={search} onChangeText={setSearch} />
+      <CategoryFilterBar categories={categories} selected={category} onSelect={setCategory} />
       <View style={{ flexDirection: 'row', marginBottom: 12 }}>
         <TouchableOpacity onPress={() => setSort('asc')} style={{ marginRight: 8 }}>
           <Text style={{ color: sort === 'asc' ? '#2563eb' : '#6b7280', fontWeight: 'bold' }}>Price: Low to High</Text>
