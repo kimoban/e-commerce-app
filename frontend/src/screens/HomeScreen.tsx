@@ -1,5 +1,5 @@
 import { ProductsState } from '@store/productsSlice';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Button, ActivityIndicator } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -29,6 +29,7 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
   const [sort, setSort] = useState<'asc' | 'desc'>(storeSort || 'asc');
   const [category, setCategory] = useState(storeCategory || 'All');
+  const syncedFromStoreRef = useRef(false);
   const [refreshing, setRefreshing] = useState(false);
 
   // Example categories, replace with dynamic if available
@@ -41,6 +42,23 @@ const HomeScreen = () => {
     const handle = setTimeout(() => setDebouncedSearch(searchInput), 300);
     return () => clearTimeout(handle);
   }, [searchInput]);
+
+  // One-time sync from store after hydration/navigation so UI reflects persisted filters
+  useEffect(() => {
+    if (syncedFromStoreRef.current) return;
+    const shouldSync = (
+      (storeSearch ?? '') !== (debouncedSearch ?? '') ||
+      (storeCategory ?? 'All') !== (category ?? 'All') ||
+      (storeSort ?? 'asc') !== (sort ?? 'asc')
+    );
+    if (shouldSync) {
+      setSearchInput(storeSearch || '');
+      setDebouncedSearch(storeSearch || '');
+      setCategory(storeCategory || 'All');
+      setSort(storeSort || 'asc');
+      syncedFromStoreRef.current = true;
+    }
+  }, [storeSearch, storeCategory, storeSort]);
   
   // Initial load and refresh on filters
   useEffect(() => {

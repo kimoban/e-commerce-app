@@ -8,23 +8,20 @@ interface CategoryFilterBarProps {
 }
 
 const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ categories, selected, onSelect }) => (
-  <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 16 }}>
-    <View style={{ flexDirection: 'row', gap: 8 }}>
-      {categories.map((cat) => (
-        <TouchableOpacity
-          key={cat}
-          onPress={() => onSelect(cat)}
-          style={{
-            paddingHorizontal: 16,
-            paddingVertical: 8,
-            borderRadius: 20,
-            backgroundColor: selected === cat ? '#2563eb' : '#f3f4f6',
-            marginRight: 8,
-          }}
-        >
-          <Text style={{ color: selected === cat ? '#fff' : '#2563eb', fontWeight: 'bold' }}>{cat}</Text>
-        </TouchableOpacity>
-      ))}
+  <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-4">
+    <View className="flex-row">
+      {categories.map((cat) => {
+        const isSelected = selected === cat;
+        return (
+          <TouchableOpacity
+            key={cat}
+            onPress={() => onSelect(cat)}
+            className={`mr-2 px-4 py-2 rounded-full ${isSelected ? 'bg-blue-600' : 'bg-gray-100'}`}
+          >
+            <Text className={`font-bold ${isSelected ? 'text-white' : 'text-blue-600'}`}>{cat}</Text>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   </ScrollView>
 );
