@@ -22,13 +22,13 @@ type RootStackParamList = {
 
 const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const { items, loading, error, hasMore } = useSelector((state: RootState) => state.products as ProductsState);
+  const { items, loading, error, hasMore, category: storeCategory, sort: storeSort, search: storeSearch } = useSelector((state: RootState) => state.products as ProductsState);
   const user = useSelector((state: RootState) => (state.user as any).user);
-  const [searchInput, setSearchInput] = useState('');
-  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [searchInput, setSearchInput] = useState(storeSearch || '');
+  const [debouncedSearch, setDebouncedSearch] = useState(storeSearch || '');
   const dispatch = useDispatch();
-  const [sort, setSort] = useState<'asc' | 'desc'>('asc');
-  const [category, setCategory] = useState('All');
+  const [sort, setSort] = useState<'asc' | 'desc'>(storeSort || 'asc');
+  const [category, setCategory] = useState(storeCategory || 'All');
   const [refreshing, setRefreshing] = useState(false);
 
   // Example categories, replace with dynamic if available
