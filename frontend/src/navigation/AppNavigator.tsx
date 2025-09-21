@@ -13,12 +13,15 @@ import RegisterScreen from '../screens/RegisterScreen';
 import OrderHistoryScreen from '../screens/OrderHistoryScreen';
 import { RootState } from '../store';
 import { UserState } from '../store/userSlice';
+import AdminProductManagementScreen from '../screens/AdminProductManagementScreen';
 
 const Stack = createNativeStackNavigator();
 
 
 const AppNavigator = () => {
-  const isAuthenticated = useSelector((state: RootState) => (state.user as UserState).isAuthenticated);
+  const userState = useSelector((state: RootState) => (state.user as UserState));
+  const isAuthenticated = userState.isAuthenticated;
+  const user = userState.user;
 
   return (
     <Stack.Navigator initialRouteName={isAuthenticated ? 'Home' : 'Login'}>
@@ -31,6 +34,9 @@ const AppNavigator = () => {
           <Stack.Screen name="Checkout" component={CheckoutScreen} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} />
+          {user && user.role === 'admin' && (
+            <Stack.Screen name="AdminProductManagement" component={AdminProductManagementScreen} />
+          )}
         </>
       ) : (
         <>

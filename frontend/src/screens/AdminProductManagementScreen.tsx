@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, TextInput, Button, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
+import { addProduct, updateProduct, deleteProduct } from '../store/productsSlice';
 
 const AdminProductManagementScreen = () => {
   const products = useSelector((state: RootState) => (state.products as any).items);
@@ -24,18 +25,31 @@ const AdminProductManagementScreen = () => {
   };
 
   const handleSave = () => {
-    // Dispatch update product action here
+    if (!form.name || !form.price || !form.image || !form.category) {
+      Alert.alert('Please fill all fields');
+      return;
+    }
+    dispatch(updateProduct({ ...form, id: editingProduct }));
     setEditingProduct(null);
+    setForm({ name: '', price: '', image: '', category: '', description: '' });
     Alert.alert('Product updated!');
   };
 
   const handleDelete = (id: string) => {
-    // Dispatch delete product action here
+    dispatch(deleteProduct(id));
     Alert.alert('Product deleted!');
   };
 
   const handleAdd = () => {
-    // Dispatch add product action here
+    if (!form.name || !form.price || !form.image || !form.category) {
+      Alert.alert('Please fill all fields');
+      return;
+    }
+    const newProduct = {
+      ...form,
+      id: Math.random().toString(36).substr(2, 9),
+    };
+    dispatch(addProduct(newProduct));
     setForm({ name: '', price: '', image: '', category: '', description: '' });
     Alert.alert('Product added!');
   };
