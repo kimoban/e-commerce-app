@@ -3,6 +3,7 @@
     "name": "EComShop",
     "slug": "ecomshop",
     "version": "1.0.0",
+    "scheme": "ecomshop",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
     "userInterfaceStyle": "light",
