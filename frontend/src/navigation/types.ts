@@ -9,4 +9,5 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   AdminProductManagement: undefined;
+  ForgotPassword: undefined;
 };

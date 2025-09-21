@@ -69,7 +69,7 @@ const LoginScreen = () => {
                 <Text className="text-red-500">Password must be at least 6 characters.</Text>
               )}
 
-              <TouchableOpacity accessibilityRole="button" accessibilityLabel="Forgot password" className="self-end mt-1">
+              <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')} accessibilityRole="button" accessibilityLabel="Forgot password" className="self-end mt-1">
                 <Text className="text-brand-primary font-medium">Forgot password?</Text>
               </TouchableOpacity>
 
