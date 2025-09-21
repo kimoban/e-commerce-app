@@ -30,3 +30,17 @@ def process_order(order_id):
     except Exception as e:
         # Log error or send notification
         pass
+
+@shared_task
+def send_password_reset_email(user_email, reset_link):
+    try:
+        send_mail(
+            'Reset your password',
+            f'Click the link to reset your password: {reset_link}',
+            'noreply@ecommerce.com',
+            [user_email],
+            fail_silently=False,
+        )
+    except Exception:
+        # Optionally log
+        pass

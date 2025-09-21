@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { View, Text, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
+import { View, Text, KeyboardAvoidingView, Platform, TouchableOpacity, Image } from 'react-native';
 import Input from '@components/Input';
 import Button from '@components/Button';
 import { useDispatch } from 'react-redux';
@@ -31,9 +31,7 @@ const LoginScreen = () => {
         <View className="flex-1 items-center justify-center px-4">
           <View className="w-full max-w-md bg-white rounded-2xl p-6 shadow-md">
             <View className="items-center mb-3">
-              <View className="w-16 h-16 rounded-full bg-brand-primary items-center justify-center">
-                <Text className="text-white text-2xl font-extrabold">ES</Text>
-              </View>
+              <Image source={require('@assets/icon.png')} style={{ width: 64, height: 64, borderRadius: 12 }} />
             </View>
             <Text className="text-3xl font-extrabold text-center text-brand-primary">Welcome back</Text>
             <Text className="text-center text-gray-500 mt-1">Sign in to continue to EComShop</Text>

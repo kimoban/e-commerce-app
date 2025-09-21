@@ -10,4 +10,5 @@ export type RootStackParamList = {
   Register: undefined;
   AdminProductManagement: undefined;
   ForgotPassword: undefined;
+  ResetLinkSent: undefined;
 };

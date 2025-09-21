@@ -12,6 +12,7 @@ import ProfileScreen from '@screens/ProfileScreen';
 import LoginScreen from '@screens/LoginScreen';
 import RegisterScreen from '@screens/RegisterScreen';
 import ForgotPasswordScreen from '@screens/ForgotPasswordScreen';
+import ResetLinkSentScreen from '@screens/ResetLinkSentScreen';
 import OrderHistoryScreen from '@screens/OrderHistoryScreen';
 import { RootState } from '@store';
 import { UserState } from '@store/userSlice';
@@ -45,6 +46,7 @@ const AppNavigator = () => {
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+          <Stack.Screen name="ResetLinkSent" component={ResetLinkSentScreen} />
         </>
       )}
     </Stack.Navigator>
