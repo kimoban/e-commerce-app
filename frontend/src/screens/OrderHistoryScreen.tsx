@@ -2,14 +2,14 @@
 import React from 'react';
 import { View, Text, FlatList, ActivityIndicator } from 'react-native';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { RootState } from '@store';
 
 const OrderHistoryScreen = () => {
   const { orders, loading, error } = useSelector((state: RootState) => (state.orders as any));
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+      <View className="flex-1 items-center justify-center bg-white">
         <ActivityIndicator size="large" color="#000" />
         <Text>Loading orders...</Text>
       </View>
@@ -18,15 +18,15 @@ const OrderHistoryScreen = () => {
 
   if (error) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+      <View className="flex-1 items-center justify-center bg-white">
         <Text style={{ color: 'red' }}>Error: {error}</Text>
       </View>
     );
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff', padding: 16 }}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 8 }}>Order History</Text>
+    <View className="flex-1 bg-white p-4">
+      <Text className="text-2xl font-bold mb-2">Order History</Text>
       <FlatList
         data={orders}
         keyExtractor={(item) => item.id}

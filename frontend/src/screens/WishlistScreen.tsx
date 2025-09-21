@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store';
-import Button from '../components/Button';
-import { removeFromWishlist } from '../store/wishlistSlice';
+import { RootState } from '@store';
+import Button from '@components/Button';
+import { removeFromWishlist } from '@store/wishlistSlice';
 
 
 const WishlistScreen = () => {
@@ -12,7 +12,7 @@ const WishlistScreen = () => {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+      <View className="flex-1 items-center justify-center bg-white">
         <Text>Loading wishlist...</Text>
       </View>
     );
@@ -20,21 +20,21 @@ const WishlistScreen = () => {
 
   if (error) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+      <View className="flex-1 items-center justify-center bg-white">
         <Text style={{ color: 'red' }}>Error: {error}</Text>
       </View>
     );
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff', padding: 16 }}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 8 }}>Wishlist</Text>
+    <View className="flex-1 bg-white p-4">
+      <Text className="text-2xl font-bold mb-2">Wishlist</Text>
       <FlatList
         data={items}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
-            <Text style={{ flex: 1 }}>{item.name}</Text>
+          <View className="flex-row items-center mb-3">
+            <Text className="flex-1">{item.name}</Text>
             <Button title="Remove" onPress={() => dispatch(removeFromWishlist(item.id))} style={{ marginLeft: 8 }} />
           </View>
         )}
