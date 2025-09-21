@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { RootStackParamList } from './types';
 import { useSelector } from 'react-redux';
 import HomeScreen from '../screens/HomeScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
@@ -15,7 +16,7 @@ import { RootState } from '../store';
 import { UserState } from '../store/userSlice';
 import AdminProductManagementScreen from '../screens/AdminProductManagementScreen';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 
 const AppNavigator = () => {
