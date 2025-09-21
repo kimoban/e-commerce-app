@@ -26,6 +26,9 @@
       "@store/*": [
         "store/*"
       ],
+      "@store": [
+        "store/index"
+      ],
       "@services/*": [
         "services/*"
       ],

@@ -1,15 +1,16 @@
-import { ProductsState } from '../store/productsSlice';
+import { ProductsState } from '@store/productsSlice';
 import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Button } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 // Update the import path if your store file is named differently or located elsewhere
-import { RootState } from '../store'; // or update to the correct path, e.g., '../store/index'
+import { RootState } from '@store'; // or update to the correct path, e.g., '../store/index'
 
-import ProductCard from '../components/ProductCard';
-import SearchBar from '../components/SearchBar';
-import CategoryFilterBar from '../components/CategoryFilterBar';
+import ProductCard from '@components/ProductCard';
+import SearchBar from '@components/SearchBar';
+import CategoryFilterBar from '@components/CategoryFilterBar';
+import Banner from '@components/Banner';
 
 type RootStackParamList = {
   Home: undefined;
@@ -36,8 +37,9 @@ const HomeScreen = () => {
     .sort((a: any, b: any) => sort === 'asc' ? a.price - b.price : b.price - a.price);
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff', padding: 16 }}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 8 }}>Products</Text>
+    <View className="flex-1 bg-white p-4">
+      <Banner />
+      <Text className="text-2xl font-bold mb-2">Products</Text>
       {user && user.role === 'admin' && (
         <Button title="Admin: Manage Products" onPress={() => navigation.navigate('AdminProductManagement')} />
       )}
