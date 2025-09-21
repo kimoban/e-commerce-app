@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
 import { View, Text } from 'react-native';
-import Input from '../components/Input';
-import Button from '../components/Button';
+import Input from '@components/Input';
+import Button from '@components/Button';
 import { useDispatch } from 'react-redux';
-import { register } from '../store/userSlice';
+import { register } from '@store/userSlice';
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState('');
@@ -18,8 +18,8 @@ const RegisterScreen = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff', padding: 16 }}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 8 }}>Register</Text>
+    <View className="flex-1 bg-white p-4">
+      <Text className="text-2xl font-bold mb-2">Register</Text>
       <Input placeholder="Name" value={name} onChangeText={setName} style={{ marginBottom: 12 }} />
       <Input placeholder="Email" value={email} onChangeText={setEmail} style={{ marginBottom: 12 }} />
       <Input placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry style={{ marginBottom: 16 }} />

@@ -1,4 +1,21 @@
-# E-Commerce Frontend
+# EComShop (Expo SDK 54)
+
+Web export and deploy
+
+- Build static web assets:
+  - npm run build:web
+  - Output: dist/
+
+- Deploy to Vercel/Netlify:
+  - Set the output/public directory to dist
+  - No build command if you pre-export locally; otherwise use the same build:web command on CI
+
+Notes
+
+- NativeWind + Tailwind are configured via babel preset and postcss.
+- Module aliases are available (@components, @screens, @store, etc.).
+
+## E-Commerce Frontend
 
 This is a React Native app built with TypeScript, Redux Toolkit, and NativeWind (Tailwind CSS for React Native).
 
