@@ -32,8 +32,8 @@ const HomeScreen = () => {
   const syncedFromStoreRef = useRef(false);
   const [refreshing, setRefreshing] = useState(false);
 
-  // Example categories, replace with dynamic if available
-  const categories = ['All', 'Electronics', 'Fashion', 'Home', 'Beauty'];
+  // Fixed categories for horizontal bar on web
+  const categories = ['All', 'Electronics', 'Fashion', 'Home'];
 
   // Note: filtering and sorting handled by backend/Redux thunks now
 
