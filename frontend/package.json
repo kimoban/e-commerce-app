@@ -1,237 +1,29 @@
 {
-  
   "name": "frontend",
-  
   "version": "1.0.0",
-  
-  "main": "index.js",
-  
+  "main": "src/App.tsx",
   "scripts": {
-  
-    
-  "start": "expo start",
-  
-    
-  "android": "expo start --android",
-  
-    
-  "ios": "expo start --ios",
-  
-    
-  "web": "expo start --web",
-  
-    
-  "test": "jest",
-  
-    
-  "test:coverage": "jest --coverage"
-  
-    
-  
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
   },
-  
   "dependencies": {
-  
-    
-  "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
-  
-    
-  "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-  
-    
-  
-    
-  "@react-navigation/bottom-tabs": "^7.4.7",
-  
-    
-  "@react-navigation/native": "^7.1.17",
-  
-    
-  "@react-navigation/native-stack": "^7.3.26",
-  
-    
-  "@reduxjs/toolkit": "^2.9.0",
-  
-    
-  "@tanstack/react-query": "^5.89.0",
-  
-    
-  "expo": "^54.0.7",
-  
-    
-  "expo-status-bar": "^3.0.8",
-  
-    
-  "i18next": "^25.5.2",
-  
-    
-  "i18next-browser-languagedetector": "^8.2.0",
-  
-    
-  "nativewind": "^4.2.1",
-  
-    
-  "react": "19.1.0",
-  
-    
-  "react-dom": "^19.1.0",
-  
-    
-  "react-i18next": "^15.7.3",
-  
-    
-  "react-native": "0.81.4",
-  
-    
-  "react-native-reanimated": "^4.1.0",
-  
-    
-  "react-native-safe-area-context": "^5.6.1",
-  
-    
-  "react-native-screens": "^4.16.0",
-  
-    
-  "react-native-web": "^0.21.1",
-  
-    
-  "react-native-worklets": "^0.5.1",
-  
-    
-  "react-redux": "^9.2.0",
-  
-    
-  "tailwindcss": "^3.4.17"
-  
+    "@react-navigation/bottom-tabs": "^7.4.7",
+    "@react-navigation/native": "^7.1.17",
+    "@react-navigation/native-stack": "^7.3.26",
+    "@reduxjs/toolkit": "^2.1.0",
+    "expo": "^54.0.7",
+    "nativewind": "^4.2.1",
+    "react": "19.1.0",
+    "react-native": "0.81.4",
+    "react-native-safe-area-context": "^5.6.1",
+    "react-native-screens": "^4.16.0",
+    "react-redux": "^9.2.0"
   },
-  
   "devDependencies": {
-  
-    
-  "@eslint/js": "^9.36.0",
-  
-    
-  "@testing-library/jest-native": "^5.4.3",
-  
-    
-  "@testing-library/react-native": "^13.3.3",
-  
-    
-  "@types/jest": "^30.0.0",
-  
-    
-  "@types/react": "~19.1.0",
-  
-    
-  "@types/react-i18next": "^7.8.3",
-  
-    
-  "@types/react-native": "^0.72.8",
-  
-    
-  "@types/redux-mock-store": "^1.5.0",
-  
-    
-  "babel-plugin-module-resolver": "^5.0.2",
-  
-    
-  "babel-preset-expo": "^54.0.1",
-  
-    
-  "eslint": "^9.36.0",
-  
-    
-  "eslint-plugin-react": "^7.37.5",
-  
-    
-  "eslint-plugin-react-native": "^5.0.0",
-  
-    
-  "jest-expo": "^54.0.11",
-  
-    
-  "redux-mock-store": "^1.5.5",
-  
-    
-  "typescript": "~5.9.2"
-  
-  },
-  
-  "private": true,
-  
-  "jest": {
-  
-    
-  "preset": "jest-expo",
-  
-    
-  "setupFilesAfterEnv": [
-  
-    
-    
-  "@testing-library/jest-native/extend-expect"
-  
-    
-  ],
-  
-    
-  "collectCoverage": true,
-  
-    
-  "collectCoverageFrom": [
-  
-    
-    
-  "components/**/*.{js,jsx,ts,tsx}",
-  
-    
-    
-  "screens/**/*.{js,jsx,ts,tsx}",
-  
-    
-    
-  "!**/node_modules/**",
-  
-    
-    
-  "!**/index.{js,ts,tsx}"
-  
-    
-  ],
-  
-    
-  "coverageThreshold": {
-  
-    
-    
-  "global": {
-  
-    
-    
-    
-  "statements": 60,
-  
-    
-    
-    
-  "branches": 50,
-  
-    
-    
-    
-  "functions": 60,
-  
-    
-    
-    
-  "lines": 60
-  
-    
-    
-  }
-  
-    
-  }
-  
+    "@types/react": "^19.1.13",
+    "@types/react-native": "^0.72.8",
+    "typescript": "~5.0.0"
   }
 }

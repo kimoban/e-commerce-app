@@ -8,15 +8,17 @@ module.exports = function(api) {
         'module-resolver',
         {
           alias: {
-            '@': './src',
+            '@assets': './src/assets',
             '@components': './src/components',
             '@screens': './src/screens',
-            '@store': './src/store',
             '@navigation': './src/navigation',
+            '@store': './src/store',
+            '@services': './src/services',
+            '@hooks': './src/hooks',
             '@utils': './src/utils',
             '@constants': './src/constants',
-            '@hooks': './src/hooks',
-            '@assets': './src/assets'
+            '@types': './src/types',
+            '@config': './src/config'
           }
         }
       ]
