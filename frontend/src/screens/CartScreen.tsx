@@ -18,13 +18,13 @@ const CartScreen = () => {
         renderItem={({ item }) => (
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
             <Text style={{ flex: 1 }}>{item.name} x{item.quantity}</Text>
-            <Text style={{ color: '#2563eb', fontWeight: 'bold' }}>${(item.price * item.quantity).toFixed(2)}</Text>
+            <Text style={{ color: '#2563eb', fontWeight: 'bold' }}>GH₵{(item.price * item.quantity).toFixed(2)}</Text>
           </View>
         )}
         ListEmptyComponent={<Text>Your cart is empty.</Text>}
       />
       <View style={{ marginTop: 16 }}>
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Total: ${total.toFixed(2)}</Text>
+  <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Total: GH₵{total.toFixed(2)}</Text>
         <Button title="Checkout" onPress={() => {}} style={{ marginTop: 12 }} />
       </View>
     </View>

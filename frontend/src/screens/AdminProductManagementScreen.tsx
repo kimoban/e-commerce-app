@@ -63,7 +63,7 @@ const AdminProductManagementScreen = () => {
         renderItem={({ item }) => (
           <View style={{ marginBottom: 12, borderWidth: 1, borderColor: '#eee', borderRadius: 8, padding: 8 }}>
             <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
-            <Text>Price: ${item.price}</Text>
+            <Text>Price: GH₵{item.price}</Text>
             <Text>Category: {item.category}</Text>
             <Button title="Edit" onPress={() => handleEdit(item)} />
             <Button title="Delete" onPress={() => handleDelete(item.id)} color="red" />

@@ -67,7 +67,7 @@ const ProductDetailScreen = () => {
     <View style={{ flex: 1, backgroundColor: '#fff', padding: 16 }}>
       <Image source={{ uri: product.image }} style={{ width: '100%', height: 200, borderRadius: 12, marginBottom: 16 }} />
       <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 4 }}>{product.name}</Text>
-      <Text style={{ color: '#2563eb', fontWeight: 'bold', marginBottom: 8 }}>${product.price.toFixed(2)}</Text>
+  <Text style={{ color: '#2563eb', fontWeight: 'bold', marginBottom: 8 }}>GH₵{product.price.toFixed(2)}</Text>
       <Text style={{ marginBottom: 12 }}>{product.description}</Text>
       <Button
         title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}

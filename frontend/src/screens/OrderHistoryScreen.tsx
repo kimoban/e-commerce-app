@@ -35,7 +35,7 @@ const OrderHistoryScreen = () => {
             <Text style={{ fontWeight: 'bold' }}>Order #{item.id}</Text>
             <Text>Date: {item.date}</Text>
             <Text>Status: {item.status}</Text>
-            <Text>Total: ${item.total.toFixed(2)}</Text>
+            <Text>Total: GH₵{item.total.toFixed(2)}</Text>
           </View>
         )}
         ListEmptyComponent={<Text>No orders found.</Text>}
