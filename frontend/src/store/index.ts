@@ -1,11 +1,11 @@
 
 import { configureStore } from '@reduxjs/toolkit';
-import productsReducer from './productsSlice.js';
-import cartReducer, { setCart } from './cartSlice.js';
-import userReducer, { setUser } from './userSlice.js';
-import wishlistReducer, { setWishlist } from './wishlistSlice.js';
-import ordersReducer from './ordersSlice.js';
-import { loadData } from '../utils/storage.js';
+import productsReducer from './productsSlice';
+import cartReducer, { setCart } from './cartSlice';
+import userReducer, { setUser } from './userSlice';
+import wishlistReducer, { setWishlist } from './wishlistSlice';
+import ordersReducer from './ordersSlice';
+import { loadData } from '../utils/storage';
 
 export const store = configureStore({
   reducer: {
@@ -29,3 +29,5 @@ export const hydrateState = async () => {
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export { hydrateState as _hydrateState };
