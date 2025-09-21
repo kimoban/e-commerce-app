@@ -1,8 +1,10 @@
+
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, FlatList } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import Button from '../components/Button';
+import { addToWishlist, removeFromWishlist } from '../store/wishlistSlice';
 
 // Simulated product and reviews for demo
 const product = {
@@ -18,11 +20,17 @@ const initialReviews = [
   { id: 'r2', user: 'Bob', text: 'Good value.' },
 ];
 
+
 const ProductDetailScreen = () => {
   const isAuthenticated = useSelector((state: RootState) => (state.user as any).isAuthenticated);
   const user = useSelector((state: RootState) => (state.user as any).user);
+  const wishlistState = useSelector((state: RootState) => (state.wishlist as any));
+  const wishlist = wishlistState.items;
+  const dispatch = useDispatch();
   const [reviews, setReviews] = useState(initialReviews);
   const [reviewText, setReviewText] = useState('');
+
+  const isWishlisted = wishlist.some((item: any) => item.id === product.id);
 
   const handleAddReview = () => {
     if (reviewText.trim() && user) {
@@ -31,12 +39,41 @@ const ProductDetailScreen = () => {
     }
   };
 
+  const handleWishlist = () => {
+    if (isWishlisted) {
+      dispatch(removeFromWishlist(product.id));
+    } else {
+      dispatch(addToWishlist({ id: product.id, name: product.name, price: product.price, image: product.image }));
+    }
+  };
+
+  if (wishlistState.loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+        <Text>Loading wishlist...</Text>
+      </View>
+    );
+  }
+
+  if (wishlistState.error) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+        <Text style={{ color: 'red' }}>Error: {wishlistState.error}</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: '#fff', padding: 16 }}>
       <Image source={{ uri: product.image }} style={{ width: '100%', height: 200, borderRadius: 12, marginBottom: 16 }} />
       <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 4 }}>{product.name}</Text>
       <Text style={{ color: '#2563eb', fontWeight: 'bold', marginBottom: 8 }}>${product.price.toFixed(2)}</Text>
       <Text style={{ marginBottom: 12 }}>{product.description}</Text>
+      <Button
+        title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
+        onPress={handleWishlist}
+        style={{ marginBottom: 16 }}
+      />
       <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>Reviews</Text>
       <FlatList
         data={reviews}
