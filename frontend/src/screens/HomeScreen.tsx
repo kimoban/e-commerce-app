@@ -29,6 +29,7 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
   const [sort, setSort] = useState<'asc' | 'desc'>('asc');
   const [category, setCategory] = useState('All');
+  const [refreshing, setRefreshing] = useState(false);
 
   // Example categories, replace with dynamic if available
   const categories = ['All', 'Electronics', 'Fashion', 'Home', 'Beauty'];
@@ -54,6 +55,13 @@ const HomeScreen = () => {
     if (!loading && hasMore) {
       dispatch<any>(loadMoreProducts());
     }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    // Reset to first page and reload via filters already in state
+    await dispatch<any>(loadProducts());
+    setRefreshing(false);
   };
 
   const renderFooter = () => {
@@ -102,6 +110,8 @@ const HomeScreen = () => {
           )}
           onEndReachedThreshold={0.5}
           onEndReached={onEndReached}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
           ListFooterComponent={renderFooter}
           ListEmptyComponent={<Text>No products found.</Text>}
         />
