@@ -4,6 +4,8 @@ import { View, Text, FlatList, TouchableOpacity, Button } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+// Update the import path if your store file is named differently or located elsewhere
+import { RootState } from '../store'; // or update to the correct path, e.g., '../store/index'
 
 import ProductCard from '../components/ProductCard';
 import SearchBar from '../components/SearchBar';
