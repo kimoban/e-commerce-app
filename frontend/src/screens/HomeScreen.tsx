@@ -24,7 +24,8 @@ const HomeScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { items, loading, error, hasMore } = useSelector((state: RootState) => state.products as ProductsState);
   const user = useSelector((state: RootState) => (state.user as any).user);
-  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const dispatch = useDispatch();
   const [sort, setSort] = useState<'asc' | 'desc'>('asc');
   const [category, setCategory] = useState('All');
@@ -33,20 +34,44 @@ const HomeScreen = () => {
   const categories = ['All', 'Electronics', 'Fashion', 'Home', 'Beauty'];
 
   // Note: filtering and sorting handled by backend/Redux thunks now
+
+  // Debounce search input to reduce requests
+  useEffect(() => {
+    const handle = setTimeout(() => setDebouncedSearch(searchInput), 300);
+    return () => clearTimeout(handle);
+  }, [searchInput]);
   
   // Initial load and refresh on filters
   useEffect(() => {
-    dispatch(setSearchFilter(search));
+    dispatch(setSearchFilter(debouncedSearch));
     // Don't send 'All' as a category; treat as no filter
     dispatch(setCategoryFilter(category === 'All' ? '' : category));
     dispatch(setSortOrder(sort));
     dispatch<any>(loadProducts());
-  }, [search, category, sort]);
+  }, [debouncedSearch, category, sort]);
 
   const onEndReached = () => {
     if (!loading && hasMore) {
       dispatch<any>(loadMoreProducts());
     }
+  };
+
+  const renderFooter = () => {
+    if (loading && items.length > 0) {
+      return (
+        <View style={{ paddingVertical: 16 }}>
+          <ActivityIndicator color="#2563eb" />
+        </View>
+      );
+    }
+    if (!hasMore && items.length > 0) {
+      return (
+        <View style={{ paddingVertical: 16, alignItems: 'center' }}>
+          <Text style={{ color: '#6b7280' }}>You have reached the end</Text>
+        </View>
+      );
+    }
+    return null;
   };
 
   return (
@@ -56,7 +81,7 @@ const HomeScreen = () => {
       {user && user.role === 'admin' && (
         <Button title="Admin: Manage Products" onPress={() => navigation.navigate('AdminProductManagement')} />
       )}
-      <SearchBar value={search} onChangeText={setSearch} />
+  <SearchBar value={searchInput} onChangeText={setSearchInput} />
       <CategoryFilterBar categories={categories} selected={category} onSelect={setCategory} />
       <View style={{ flexDirection: 'row', marginBottom: 12 }}>
         <TouchableOpacity onPress={() => setSort('asc')} style={{ marginRight: 8 }}>
@@ -77,11 +102,7 @@ const HomeScreen = () => {
           )}
           onEndReachedThreshold={0.5}
           onEndReached={onEndReached}
-          ListFooterComponent={loading ? (
-            <View style={{ paddingVertical: 16 }}>
-              <ActivityIndicator color="#2563eb" />
-            </View>
-          ) : null}
+          ListFooterComponent={renderFooter}
           ListEmptyComponent={<Text>No products found.</Text>}
         />
       )}
