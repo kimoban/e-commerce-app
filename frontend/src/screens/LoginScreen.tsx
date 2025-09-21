@@ -35,14 +35,22 @@ const LoginScreen = () => {
   // Read public env vars safely in RN + web
   const env = useMemo(() => ((global as any)?.process?.env ?? {}) as Record<string, string | undefined>, []);
 
-  // Google Auth
-  const googleClientId = (Platform.OS === 'web')
-    ? env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID
-    : Platform.OS === 'ios'
-    ? env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID
-    : env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID;
+  // Google Auth: supply platform-specific IDs (fallback to placeholder to avoid runtime throws)
+  const googleIds = {
+    ios: env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || 'disabled-ios-google-client-id',
+    android: env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID || 'disabled-android-google-client-id',
+    web: env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || 'disabled-web-google-client-id',
+  };
+  const googleConfigured = Platform.select({
+    android: !!env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
+    ios: !!env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+    default: !!env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+  }) as boolean;
+
   const [gRequest, gResponse, gPromptAsync] = Google.useAuthRequest({
-    clientId: googleClientId,
+    iosClientId: googleIds.ios,
+    androidClientId: googleIds.android,
+    webClientId: googleIds.web,
     responseType: ResponseType.Token,
     scopes: ['openid', 'profile', 'email'],
   });
@@ -72,6 +80,7 @@ const LoginScreen = () => {
   }, [gResponse]);
 
   // Facebook Auth
+  const facebookConfigured = !!env.EXPO_PUBLIC_FACEBOOK_APP_ID;
   const [fbRequest, fbResponse, fbPromptAsync] = Facebook.useAuthRequest({
     clientId: env.EXPO_PUBLIC_FACEBOOK_APP_ID,
     responseType: ResponseType.Token,
@@ -158,9 +167,10 @@ const LoginScreen = () => {
                     accessibilityRole="button"
                     accessibilityLabel="Continue with Facebook"
                     className="rounded-full p-2 bg-gray-100"
+                    disabled={!facebookConfigured || !!loadingProvider}
                     onPress={() => {
                       if (!fbRequest) return;
-                      if (!env.EXPO_PUBLIC_FACEBOOK_APP_ID) {
+                      if (!facebookConfigured) {
                         Alert.alert('Missing configuration', 'FACEBOOK_APP_ID is not set.');
                         return;
                       }
@@ -177,9 +187,10 @@ const LoginScreen = () => {
                     accessibilityRole="button"
                     accessibilityLabel="Continue with Google"
                     className="rounded-full p-2 bg-gray-100"
+                    disabled={!googleConfigured || !!loadingProvider}
                     onPress={() => {
                       if (!gRequest) return;
-                      if (!googleClientId) {
+                      if (!googleConfigured) {
                         Alert.alert('Missing configuration', 'Google client ID is not set for this platform.');
                         return;
                       }
