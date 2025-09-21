@@ -2,7 +2,7 @@
 import { configureStore, createListenerMiddleware, isAnyOf } from '@reduxjs/toolkit';
 import productsReducer, { setCategory, setSearch, setSort } from './productsSlice';
 import cartReducer, { setCart } from './cartSlice';
-import userReducer, { setUser } from './userSlice';
+import userReducer, { setUser, login as loginAction, logout as logoutAction, register as registerAction } from './userSlice';
 import wishlistReducer, { setWishlist } from './wishlistSlice';
 import ordersReducer from './ordersSlice';
 import { loadData, saveData } from '../utils/storage';
@@ -16,6 +16,20 @@ listenerMiddleware.startListening({
     const { category, search, sort } = state.products || {};
     try {
       await saveData('filters', { category: category ?? '', search: search ?? '', sort: sort ?? 'asc' });
+    } catch (_) {
+      // ignore persistence errors
+    }
+  },
+});
+
+// Persist user on auth changes
+listenerMiddleware.startListening({
+  matcher: isAnyOf(loginAction, registerAction, logoutAction),
+  effect: async (_action, api) => {
+    const state = api.getState() as any;
+    const userState = state.user as { user: any; isAuthenticated: boolean };
+    try {
+      await saveData('user', userState);
     } catch (_) {
       // ignore persistence errors
     }
