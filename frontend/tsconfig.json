@@ -47,7 +47,8 @@
     }
   },
   "include": [
-    "src"
+    "src",
+    "nativewind-env.d.ts"
   ],
   "exclude": [
     "node_modules",
