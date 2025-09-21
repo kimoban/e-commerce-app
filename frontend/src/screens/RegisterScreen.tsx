@@ -14,7 +14,7 @@ const RegisterScreen = () => {
 
   const handleRegister = () => {
     // Simulate registration, replace with real API call
-    dispatch(register({ id: '2', name, email }));
+    dispatch(register({ id: '2', name, email, role: 'user' }));
   };
 
   return (

@@ -1,11 +1,24 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 const CategoryScreen = () => (
-  <View className="flex-1 items-center justify-center bg-white">
-    <Text className="text-lg font-bold">Category Screen</Text>
+  <View style={styles.container}>
+    <Text style={styles.title}>Category Screen</Text>
     {/* Category products will go here */}
   </View>
 );
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
 
 export default CategoryScreen;

@@ -13,7 +13,7 @@ const LoginScreen = () => {
 
   const handleLogin = () => {
     // Simulate login, replace with real API call
-    dispatch(login({ id: '1', name: 'Demo User', email }));
+    dispatch(login({ id: '1', name: 'Demo User', email, role: 'user' }));
   };
 
   return (

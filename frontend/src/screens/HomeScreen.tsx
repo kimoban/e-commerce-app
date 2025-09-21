@@ -3,14 +3,20 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Button } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { RootState } from '../store';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 import ProductCard from '../components/ProductCard';
 import SearchBar from '../components/SearchBar';
 import CategoryFilterBar from '../components/CategoryFilterBar';
 
+type RootStackParamList = {
+  Home: undefined;
+  AdminProductManagement: undefined;
+  // Add other routes here as needed
+};
+
 const HomeScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { items, loading, error } = useSelector((state: RootState) => state.products as ProductsState);
   const user = useSelector((state: RootState) => (state.user as any).user);
   const [search, setSearch] = useState('');
