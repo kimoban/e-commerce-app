@@ -73,6 +73,29 @@ const LoginScreen = () => {
 
               <Button title="Login" onPress={handleLogin} disabled={!isValid} style={{ marginTop: 16 }} />
 
+              {/* Social login options (UI only) */}
+              <View className="mt-4">
+                <Text className="text-center text-gray-500 mb-2">Or continue with</Text>
+                <View className="flex-row justify-center space-x-4">
+                  <TouchableOpacity
+                    accessibilityRole="button"
+                    accessibilityLabel="Continue with Facebook"
+                    className="rounded-full p-2 bg-gray-100"
+                    onPress={() => { /* TODO: wire Facebook auth */ }}
+                  >
+                    <Image source={require('@assets/images/facebook.png')} style={{ width: 32, height: 32 }} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    accessibilityRole="button"
+                    accessibilityLabel="Continue with Google"
+                    className="rounded-full p-2 bg-gray-100"
+                    onPress={() => { /* TODO: wire Google auth */ }}
+                  >
+                    <Image source={require('@assets/images/google.png')} style={{ width: 32, height: 32 }} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
               <View className="flex-row justify-center mt-4">
                 <Text className="text-gray-600">New here? </Text>
                 <TouchableOpacity onPress={() => navigation.navigate('Register')} accessibilityRole="button" accessibilityLabel="Create an account">
