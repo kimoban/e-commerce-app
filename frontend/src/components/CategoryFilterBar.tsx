@@ -16,6 +16,9 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ categories, selec
           <TouchableOpacity
             key={cat}
             onPress={() => onSelect(cat)}
+            accessibilityRole="button"
+            accessibilityLabel={`Filter by ${cat}`}
+            accessibilityState={{ selected: isSelected }}
             className={`mr-2 px-4 py-2 rounded-full ${isSelected ? 'bg-blue-600' : 'bg-gray-100'}`}
           >
             <Text className={`font-bold ${isSelected ? 'text-white' : 'text-blue-600'}`}>{cat}</Text>

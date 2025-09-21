@@ -26,6 +26,7 @@ This is a React Native app built with TypeScript, Redux Toolkit, and NativeWind 
 - Pagination & infinite scrolling
 - Responsive, accessible UI
 - Authentication, cart, checkout, profile, and order history
+- Localized currency display (GH₵) with a shared formatter util
 
 ## Project Structure
 
@@ -36,6 +37,20 @@ See the `src/` folder for all app code, organized by features and domain.
 1. Install dependencies: `npm install`
 2. Start the app: `npm start` (or `npm run android` / `npm run ios` / `npm run web`)
 3. Configure environment variables in `.env`
+
+### Currency formatting (GH₵)
+
+All price displays use a shared formatter:
+
+- `src/utils/currency.ts` exports `formatCurrency(value: number)`
+- Backed by `Intl.NumberFormat('en-GH', { currency: 'GHS' })` with a fallback for environments without Intl
+- Example: `formatCurrency(1234.5) // => GH₵1,234.50`
+
+### Accessibility conventions
+
+- Buttons and tappable cards have `accessibilityRole="button"`, `accessibilityLabel`, and minimum touch target size (>= 44px height)
+- Filter chips (category bar) expose selected state via `accessibilityState={{ selected: true }}`
+- Prefer semantic text via headings and labels; avoid color as the only indicator
 
 ## Tech Stack
 
@@ -48,4 +63,6 @@ See the `src/` folder for all app code, organized by features and domain.
 ## Deployment
 
 - Deploy static web build to Vercel/Netlify
+  - Vercel configuration is in `vercel.json` (output directory: `dist`)
+  - CI workflow `.github/workflows/frontend-ci.yml` builds and uploads the web artifact on every push/PR
 - Use Expo for mobile deployment

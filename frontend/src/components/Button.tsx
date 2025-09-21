@@ -16,9 +16,14 @@ const Button: React.FC<ButtonProps> = ({ title, onPress, style, textStyle, disab
   <TouchableOpacity
     onPress={onPress}
     disabled={disabled}
-    style={[{ paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8, backgroundColor: '#2563eb', opacity: disabled ? 0.5 : 1 }, style]}
+    accessibilityRole="button"
+    accessibilityLabel={title}
+    accessibilityState={{ disabled }}
+    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+    className={`px-4 py-3 rounded-lg ${disabled ? 'opacity-50' : ''}`}
+    style={[{ backgroundColor: '#2563eb', minHeight: 44, justifyContent: 'center' }, style]}
   >
-    <Text style={[{ color: '#fff', textAlign: 'center', fontWeight: '600' }, textStyle]}>{title}</Text>
+    <Text className="text-white text-center font-semibold" style={textStyle}>{title}</Text>
   </TouchableOpacity>
 );
 

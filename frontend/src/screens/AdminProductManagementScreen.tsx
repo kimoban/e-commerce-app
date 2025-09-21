@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, TextInput, Button, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store';
+import { RootState } from '@store';
 import { addProduct, updateProduct, deleteProduct } from '../store/productsSlice';
+import { formatCurrency } from '@utils/currency';
 
 const AdminProductManagementScreen = () => {
   const products = useSelector((state: RootState) => (state.products as any).items);
@@ -63,7 +64,7 @@ const AdminProductManagementScreen = () => {
         renderItem={({ item }) => (
           <View style={{ marginBottom: 12, borderWidth: 1, borderColor: '#eee', borderRadius: 8, padding: 8 }}>
             <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
-            <Text>Price: GH₵{item.price}</Text>
+            <Text>Price: {formatCurrency(item.price)}</Text>
             <Text>Category: {item.category}</Text>
             <Button title="Edit" onPress={() => handleEdit(item)} />
             <Button title="Delete" onPress={() => handleDelete(item.id)} color="red" />

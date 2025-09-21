@@ -109,16 +109,16 @@ const HomeScreen = () => {
       )}
   <SearchBar value={searchInput} onChangeText={setSearchInput} />
       <CategoryFilterBar categories={categories} selected={category} onSelect={setCategory} />
-      <View style={{ flexDirection: 'row', marginBottom: 12 }}>
-        <TouchableOpacity onPress={() => setSort('asc')} style={{ marginRight: 8 }}>
-          <Text style={{ color: sort === 'asc' ? '#2563eb' : '#6b7280', fontWeight: 'bold' }}>Price: Low to High</Text>
+      <View className="flex-row mb-3">
+        <TouchableOpacity onPress={() => setSort('asc')} className="mr-2">
+          <Text className={`${sort === 'asc' ? 'text-brand-primary' : 'text-gray-500'} font-bold`}>Price: Low to High</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setSort('desc')}>
-          <Text style={{ color: sort === 'desc' ? '#2563eb' : '#6b7280', fontWeight: 'bold' }}>Price: High to Low</Text>
+          <Text className={`${sort === 'desc' ? 'text-brand-primary' : 'text-gray-500'} font-bold`}>Price: High to Low</Text>
         </TouchableOpacity>
       </View>
       {error ? (
-        <Text style={{ color: 'red' }}>{error}</Text>
+        <Text className="text-red-600">{error}</Text>
       ) : (
         <FlatList
           data={items}

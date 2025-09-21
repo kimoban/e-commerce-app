@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, FlatList, ActivityIndicator } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '@store';
+import { formatCurrency } from '@utils/currency';
 
 const OrderHistoryScreen = () => {
   const { orders, loading, error } = useSelector((state: RootState) => (state.orders as any));
@@ -35,7 +36,7 @@ const OrderHistoryScreen = () => {
             <Text style={{ fontWeight: 'bold' }}>Order #{item.id}</Text>
             <Text>Date: {item.date}</Text>
             <Text>Status: {item.status}</Text>
-            <Text>Total: GH₵{item.total.toFixed(2)}</Text>
+            <Text>Total: {formatCurrency(item.total)}</Text>
           </View>
         )}
         ListEmptyComponent={<Text>No orders found.</Text>}

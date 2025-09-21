@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, FlatList } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store';
+import { RootState } from '@store';
 import Button from '../components/Button';
 import { addToWishlist, removeFromWishlist } from '../store/wishlistSlice';
+import { formatCurrency } from '@utils/currency';
 
 // Simulated product and reviews for demo
 const product = {
@@ -66,8 +67,8 @@ const ProductDetailScreen = () => {
   return (
     <View style={{ flex: 1, backgroundColor: '#fff', padding: 16 }}>
       <Image source={{ uri: product.image }} style={{ width: '100%', height: 200, borderRadius: 12, marginBottom: 16 }} />
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 4 }}>{product.name}</Text>
-  <Text style={{ color: '#2563eb', fontWeight: 'bold', marginBottom: 8 }}>GH₵{product.price.toFixed(2)}</Text>
+    <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 4 }}>{product.name}</Text>
+  <Text style={{ color: '#2563eb', fontWeight: 'bold', marginBottom: 8 }}>{formatCurrency(product.price)}</Text>
       <Text style={{ marginBottom: 12 }}>{product.description}</Text>
       <Button
         title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
