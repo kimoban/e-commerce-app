@@ -103,69 +103,73 @@ const HomeScreen = () => {
 
   return (
     <View className="flex-1 bg-white p-4" style={{ minHeight: 0 }}>
-      {/* Top bar: user badge and sign out */}
-      <View className="flex-row items-center justify-between mb-2">
-        <Text className="text-xl font-semibold">EComShop</Text>
-        {user ? (
-          <View className="flex-row items-center">
-            <View className="w-8 h-8 rounded-full bg-brand-primary/10 items-center justify-center mr-2">
-              <Text className="text-brand-primary font-bold" accessibilityLabel={`Logged in as ${user.name}`}>
-                {user.name?.charAt(0)?.toUpperCase() || 'U'}
-              </Text>
+      <View className="flex-1" style={{ minHeight: 0 }}>
+        <FlatList
+          data={items}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <ProductCard {...item} onPress={() => {}} />
+          )}
+          style={{ flex: 1 }}
+          contentContainerStyle={{ paddingBottom: 24 }}
+          onEndReachedThreshold={0.5}
+          onEndReached={onEndReached}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          ListFooterComponent={renderFooter}
+          ListHeaderComponent={(
+            <View>
+              {/* Top bar: user badge and sign out */}
+              <View className="flex-row items-center justify-between mb-2">
+                <Text className="text-xl font-semibold">EComShop</Text>
+                {user ? (
+                  <View className="flex-row items-center">
+                    <View className="w-8 h-8 rounded-full bg-brand-primary/10 items-center justify-center mr-2">
+                      <Text className="text-brand-primary font-bold" accessibilityLabel={`Logged in as ${user.name}`}>
+                        {user.name?.charAt(0)?.toUpperCase() || 'U'}
+                      </Text>
+                    </View>
+                    <TouchableOpacity onPress={() => dispatch(logout())} accessibilityRole="button" accessibilityLabel="Sign out">
+                      <Text className="text-red-600 font-semibold">Sign out</Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : null}
+              </View>
+              <Banner />
+              {/* Minimal error banner for 401 Unauthorized */}
+              {typeof (error) === 'string' && /unauthorized|401/i.test(error) && (
+                <View className="bg-red-50 border border-red-200 rounded-lg p-3 mb-3">
+                  <Text className="text-red-700 mb-2">Your session has expired. Please sign in again.</Text>
+                  <View className="flex-row">
+                    <TouchableOpacity onPress={() => navigation.navigate('Login' as any)} accessibilityRole="button" accessibilityLabel="Sign in again">
+                      <Text className="text-brand-primary font-semibold">Sign in again</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
+              <Text className="text-2xl font-bold mb-2">Products</Text>
+              {user && user.role === 'admin' && (
+                <Button title="Admin: Manage Products" onPress={() => navigation.navigate('AdminProductManagement')} />
+              )}
+              <SearchBar value={searchInput} onChangeText={setSearchInput} />
+              <CategoryFilterBar categories={categories} selected={category} onSelect={setCategory} />
+              <View className="flex-row mb-3">
+                <TouchableOpacity onPress={() => setSort('asc')} className="mr-2">
+                  <Text className={`${sort === 'asc' ? 'text-brand-primary' : 'text-gray-500'} font-bold`}>Price: Low to High</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSort('desc')}>
+                  <Text className={`${sort === 'desc' ? 'text-brand-primary' : 'text-gray-500'} font-bold`}>Price: High to Low</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <TouchableOpacity onPress={() => dispatch(logout())} accessibilityRole="button" accessibilityLabel="Sign out">
-              <Text className="text-red-600 font-semibold">Sign out</Text>
-            </TouchableOpacity>
-          </View>
-        ) : null}
+          )}
+          ListEmptyComponent={
+            <Text className="text-gray-600">
+              {error ? String(error) : 'No products found.'}
+            </Text>
+          }
+        />
       </View>
-      <Banner />
-      {/* Minimal error banner for 401 Unauthorized */}
-      {typeof (error) === 'string' && /unauthorized|401/i.test(error) && (
-        <View className="bg-red-50 border border-red-200 rounded-lg p-3 mb-3">
-          <Text className="text-red-700 mb-2">Your session has expired. Please sign in again.</Text>
-          <View className="flex-row">
-            <TouchableOpacity onPress={() => navigation.navigate('Login' as any)} accessibilityRole="button" accessibilityLabel="Sign in again">
-              <Text className="text-brand-primary font-semibold">Sign in again</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
-      <Text className="text-2xl font-bold mb-2">Products</Text>
-      {user && user.role === 'admin' && (
-        <Button title="Admin: Manage Products" onPress={() => navigation.navigate('AdminProductManagement')} />
-      )}
-  <SearchBar value={searchInput} onChangeText={setSearchInput} />
-      <CategoryFilterBar categories={categories} selected={category} onSelect={setCategory} />
-      <View className="flex-row mb-3">
-        <TouchableOpacity onPress={() => setSort('asc')} className="mr-2">
-          <Text className={`${sort === 'asc' ? 'text-brand-primary' : 'text-gray-500'} font-bold`}>Price: Low to High</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setSort('desc')}>
-          <Text className={`${sort === 'desc' ? 'text-brand-primary' : 'text-gray-500'} font-bold`}>Price: High to Low</Text>
-        </TouchableOpacity>
-      </View>
-      {error ? (
-        <Text className="text-red-600">{error}</Text>
-      ) : (
-        <View className="flex-1" style={{ minHeight: 0 }}>
-          <FlatList
-            data={items}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <ProductCard {...item} onPress={() => {}} />
-            )}
-            style={{ flex: 1 }}
-            contentContainerStyle={{ paddingBottom: 24 }}
-            onEndReachedThreshold={0.5}
-            onEndReached={onEndReached}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            ListFooterComponent={renderFooter}
-            ListEmptyComponent={<Text>No products found.</Text>}
-          />
-        </View>
-      )}
     </View>
   );
 };
