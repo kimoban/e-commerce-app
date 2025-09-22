@@ -114,7 +114,7 @@ const LoginScreen = () => {
 
   return (
     <View className="flex-1 bg-gray-50">
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+  <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1" style={{ minHeight: 0 }}>
         <View
           className="flex-1 items-center justify-center px-4"
           style={isWeb ? { minHeight: windowHeight } : undefined}

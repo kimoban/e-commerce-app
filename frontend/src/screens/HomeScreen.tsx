@@ -102,7 +102,7 @@ const HomeScreen = () => {
   };
 
   return (
-    <View className="flex-1 bg-white p-4">
+    <View className="flex-1 bg-white p-4" style={{ minHeight: 0 }}>
       {/* Top bar: user badge and sign out */}
       <View className="flex-row items-center justify-between mb-2">
         <Text className="text-xl font-semibold">EComShop</Text>
@@ -148,19 +148,23 @@ const HomeScreen = () => {
       {error ? (
         <Text className="text-red-600">{error}</Text>
       ) : (
-        <FlatList
-          data={items}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <ProductCard {...item} onPress={() => {}} />
-          )}
-          onEndReachedThreshold={0.5}
-          onEndReached={onEndReached}
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          ListFooterComponent={renderFooter}
-          ListEmptyComponent={<Text>No products found.</Text>}
-        />
+        <View className="flex-1" style={{ minHeight: 0 }}>
+          <FlatList
+            data={items}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <ProductCard {...item} onPress={() => {}} />
+            )}
+            style={{ flex: 1 }}
+            contentContainerStyle={{ paddingBottom: 24 }}
+            onEndReachedThreshold={0.5}
+            onEndReached={onEndReached}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            ListFooterComponent={renderFooter}
+            ListEmptyComponent={<Text>No products found.</Text>}
+          />
+        </View>
       )}
     </View>
   );
