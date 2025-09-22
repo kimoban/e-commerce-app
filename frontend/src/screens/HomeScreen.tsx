@@ -101,14 +101,32 @@ const HomeScreen = () => {
     return null;
   };
 
+  // Build a combined data list with a sticky controls row as the first item
+  const stickyControls = { __type: 'sticky' as const, id: '__sticky__' };
+  const dataCombined: any[] = [stickyControls, ...items];
+
   return (
     <View className="flex-1 bg-white p-4" style={{ minHeight: 0 }}>
       <View className="flex-1" style={{ minHeight: 0 }}>
         <FlatList
-          data={items}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <ProductCard {...item} onPress={() => {}} />
+          data={dataCombined}
+          keyExtractor={(item: any) => (item?.__type === 'sticky' ? item.id : item.id)}
+          renderItem={({ item }: any) => (
+            item?.__type === 'sticky' ? (
+              <View style={{ backgroundColor: 'white' }}>
+                <CategoryFilterBar categories={categories} selected={category} onSelect={setCategory} />
+                <View className="flex-row mb-3">
+                  <TouchableOpacity onPress={() => setSort('asc')} className="mr-2">
+                    <Text className={`${sort === 'asc' ? 'text-brand-primary' : 'text-gray-500'} font-bold`}>Price: Low to High</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => setSort('desc')}>
+                    <Text className={`${sort === 'desc' ? 'text-brand-primary' : 'text-gray-500'} font-bold`}>Price: High to Low</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ) : (
+              <ProductCard {...item} onPress={() => {}} />
+            )
           )}
           style={{ flex: 1 }}
           contentContainerStyle={{ paddingBottom: 24 }}
@@ -117,6 +135,7 @@ const HomeScreen = () => {
           refreshing={refreshing}
           onRefresh={onRefresh}
           ListFooterComponent={renderFooter}
+          stickyHeaderIndices={[1]}
           ListHeaderComponent={(
             <View>
               {/* Top bar: user badge and sign out */}
@@ -152,15 +171,6 @@ const HomeScreen = () => {
                 <Button title="Admin: Manage Products" onPress={() => navigation.navigate('AdminProductManagement')} />
               )}
               <SearchBar value={searchInput} onChangeText={setSearchInput} />
-              <CategoryFilterBar categories={categories} selected={category} onSelect={setCategory} />
-              <View className="flex-row mb-3">
-                <TouchableOpacity onPress={() => setSort('asc')} className="mr-2">
-                  <Text className={`${sort === 'asc' ? 'text-brand-primary' : 'text-gray-500'} font-bold`}>Price: Low to High</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setSort('desc')}>
-                  <Text className={`${sort === 'desc' ? 'text-brand-primary' : 'text-gray-500'} font-bold`}>Price: High to Low</Text>
-                </TouchableOpacity>
-              </View>
             </View>
           )}
           ListEmptyComponent={
