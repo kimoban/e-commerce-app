@@ -1,6 +1,6 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, KeyboardAvoidingView, Platform, TouchableOpacity, Image, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, KeyboardAvoidingView, Platform, TouchableOpacity, Image, Alert, ActivityIndicator, Dimensions } from 'react-native';
 import Input from '@components/Input';
 import Button from '@components/Button';
 import { useDispatch } from 'react-redux';
@@ -109,10 +109,16 @@ const LoginScreen = () => {
     run();
   }, [fbResponse]);
 
+  const isWeb = Platform.OS === 'web';
+  const windowHeight = isWeb ? Dimensions.get('window').height : undefined;
+
   return (
     <View className="flex-1 bg-gray-50">
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
-        <View className="flex-1 items-center justify-center px-4">
+        <View
+          className="flex-1 items-center justify-center px-4"
+          style={isWeb ? { minHeight: windowHeight } : undefined}
+        >
           <View className="w-full max-w-md bg-white rounded-2xl p-6 shadow-md">
             <View className="items-center mb-3">
               <Image source={require('@assets/icons/logo.png')} style={{ width: 64, height: 64, borderRadius: 12 }} />
