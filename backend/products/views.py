@@ -27,16 +27,41 @@ class ProductViewSet(viewsets.ModelViewSet):
 	throttle_classes = [UserRateThrottle, AnonRateThrottle]
 	def get_queryset(self):
 		queryset = super().get_queryset()
-		category = self.request.query_params.get('category')
+		params = self.request.query_params
+		# Support category by name (frontend sends blank for All)
+		category = params.get('category')
 		if category:
-			queryset = queryset.filter(category__id=category)
-		min_price = self.request.query_params.get('min_price')
-		max_price = self.request.query_params.get('max_price')
-		if min_price:
-			queryset = queryset.filter(price__gte=min_price)
-		if max_price:
-			queryset = queryset.filter(price__lte=max_price)
+			# Try by name first, fall back to id if numeric
+			if category.isdigit():
+				queryset = queryset.filter(category__id=category)
+			else:
+				queryset = queryset.filter(category__name__iexact=category)
+		# Support search via 'q'
+		q = params.get('q')
+		if q:
+			queryset = queryset.filter(name__icontains=q) | queryset.filter(description__icontains=q)
+		# Support sort=price or -price
+		sort = params.get('sort')
+		if sort in ['price', '-price']:
+			queryset = queryset.order_by(sort)
 		return queryset
+
+	def list(self, request, *args, **kwargs):
+		queryset = self.filter_queryset(self.get_queryset())
+		# Simple pagination compatible with frontend 'page' and 'limit'
+		try:
+			page = int(request.query_params.get('page', '1'))
+		except ValueError:
+			page = 1
+		try:
+			limit = int(request.query_params.get('limit', '12'))
+		except ValueError:
+			limit = 12
+		start = (page - 1) * limit
+		end = start + limit
+		total = queryset.count()
+		serializer = self.get_serializer(queryset[start:end], many=True)
+		return Response({'items': serializer.data, 'total': total})
 
 class AsyncProductListView(APIView):
 	permission_classes = [IsAuthenticatedOrReadOnly]

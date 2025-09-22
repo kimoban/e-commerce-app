@@ -4,9 +4,12 @@ from rest_framework import status
 from django.urls import reverse
 from django.conf import settings
 from .tasks import send_welcome_email, send_password_reset_email
+from rest_framework.permissions import AllowAny
+
+from django.contrib.auth.models import User
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class RegisterUserView(APIView):
-    from rest_framework.permissions import AllowAny
     permission_classes = [AllowAny]
     def post(self, request):
         from django.contrib.auth.models import User
@@ -25,7 +28,6 @@ class RegisterUserView(APIView):
 
 
 class ForgotPasswordView(APIView):
-    from rest_framework.permissions import AllowAny
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -44,5 +46,54 @@ class ForgotPasswordView(APIView):
                 # If Celery is configured, prefer: send_password_reset_email.delay(email, reset_link)
                 send_password_reset_email(email, reset_link)
             return Response({'message': 'If the email exists, a reset link will be sent.'})
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class GoogleExchangeView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        access_token = request.data.get('access_token')
+        if not access_token:
+            return Response({'error': 'access_token is required'}, status=status.HTTP_400_BAD_REQUEST)
+        # NOTE: In production, validate the token with Google and fetch profile info.
+        # For now, simulate extracting email/name from the token.
+        email = f"google_{access_token[:8]}@example.com"
+        name = 'Google User'
+        try:
+            user, created = User.objects.get_or_create(username=email, defaults={'email': email})
+            if created:
+                user.first_name = name
+                user.save()
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'token': str(refresh.access_token),
+                'user': {'id': user.pk, 'name': user.first_name or user.username, 'email': user.email, 'role': 'user'}
+            })
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class FacebookExchangeView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        access_token = request.data.get('access_token')
+        if not access_token:
+            return Response({'error': 'access_token is required'}, status=status.HTTP_400_BAD_REQUEST)
+        # NOTE: In production, validate the token with Facebook and fetch profile info.
+        email = f"fb_{access_token[:8]}@example.com"
+        name = 'Facebook User'
+        try:
+            user, created = User.objects.get_or_create(username=email, defaults={'email': email})
+            if created:
+                user.first_name = name
+                user.save()
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'token': str(refresh.access_token),
+                'user': {'id': user.pk, 'name': user.first_name or user.username, 'email': user.email, 'role': 'user'}
+            })
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
