@@ -1,6 +1,7 @@
 import { ENDPOINTS } from '@config/api';
 import ENV from '@config/env';
 import type { Product } from '@store/productsSlice';
+import { apiFetch } from './http';
 
 export type FetchProductsParams = {
   page: number;
@@ -24,7 +25,7 @@ export async function fetchProducts(params: FetchProductsParams): Promise<FetchP
   if (params.sort) url.searchParams.set('sort', params.sort === 'asc' ? 'price' : '-price');
 
   try {
-    const res = await fetch(url.toString());
+  const res = await apiFetch(url.toString());
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     // Accept various shapes: {items,total} | {data,total} | []
