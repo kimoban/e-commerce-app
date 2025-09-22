@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, ImageBackground, Platform, useWindowDimensions } from 'react-native';
+import React, { useMemo } from 'react';
+import { View, Text, ImageBackground, Platform, useWindowDimensions, Image as RNImage } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const Banner: React.FC = () => {
@@ -9,12 +9,23 @@ const Banner: React.FC = () => {
   const bgSource = isWeb
     ? require('@assets/images/background image web.png')
     : require('@assets/images/background image mobile.png');
+
+  // Compute the aspect ratio of the selected image so it can be fully visible without cropping
+  const aspectRatio = useMemo(() => {
+    try {
+      const meta = RNImage.resolveAssetSource(bgSource);
+      if (meta?.width && meta?.height) return meta.width / meta.height;
+    } catch {}
+    // Reasonable default banner ratio if metadata isn't available
+    return 16 / 9;
+  }, [bgSource]);
   return (
     <ImageBackground
       source={bgSource}
-      resizeMode="cover"
+      resizeMode="contain"
       imageStyle={{ borderRadius: 12 }}
       className="w-full rounded-xl overflow-hidden mb-4"
+      style={{ aspectRatio, backgroundColor: '#0b1020' }}
     >
       {/* Overlay: on native keep semi-transparent black; on web add gentle gradient */}
       {isWeb ? (
