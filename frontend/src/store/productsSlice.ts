@@ -1,12 +1,13 @@
 
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { ImageSourcePropType } from 'react-native';
 import { fetchProducts } from '@services/products';
 
 export interface Product {
   id: string;
   name: string;
   price: number;
-  image: string;
+  image: string | ImageSourcePropType;
   category: string;
 }
 

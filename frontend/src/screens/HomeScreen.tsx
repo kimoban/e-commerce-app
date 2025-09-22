@@ -33,8 +33,8 @@ const HomeScreen = () => {
   const syncedFromStoreRef = useRef(false);
   const [refreshing, setRefreshing] = useState(false);
 
-  // Fixed categories for horizontal bar on web
-  const categories = ['All', 'Electronics', 'Fashion', 'Home'];
+  // Fixed categories for horizontal bar on web (aligned with mock image mapping)
+  const categories = ['All', 'Electronics', 'Fashion', 'Home', 'Beauty', 'Accessories', 'Automotive'];
 
   // Note: filtering and sorting handled by backend/Redux thunks now
 

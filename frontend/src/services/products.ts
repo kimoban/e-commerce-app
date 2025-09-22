@@ -37,17 +37,49 @@ export async function fetchProducts(params: FetchProductsParams): Promise<FetchP
     return { items: [] };
   } catch (e) {
     // Fallback mock to keep the UI functional in dev without backend
+    const categoryImages: Record<string, any> = {
+      Electronics: require('@assets/product-images/Computer.png'),
+      Fashion: require('@assets/product-images/canvas shoe.png'),
+      Home: require('@assets/product-images/bag.png'),
+      Beauty: require('@assets/product-images/camera.png'),
+      Accessories: require('@assets/product-images/headphone.png'),
+      Automotive: require('@assets/product-images/car.png'),
+    };
     const start = (params.page - 1) * params.pageSize;
-    const mockItems: Product[] = Array.from({ length: params.pageSize }).map((_, i) => {
-      const id = String(start + i + 1);
+    const categoriesPool = ['Electronics', 'Fashion', 'Home', 'Beauty', 'Accessories', 'Automotive'] as const;
+    const selectedCat = params.category && params.category !== 'All' ? (params.category as any) : null;
+
+    // Generate a larger pool so that search/sort/pagination feel realistic
+    const poolSize = 100;
+    let pool: Product[] = Array.from({ length: poolSize }).map((_, i) => {
+      const id = String(i + 1);
+      const cat = (selectedCat && categoriesPool.includes(selectedCat))
+        ? selectedCat
+        : categoriesPool[Math.floor(Math.random() * categoriesPool.length)];
+      const name = `${cat} Item ${id}`;
+      const price = Math.floor(Math.random() * 200) + 10;
       return {
         id,
-        name: `Mock Product ${id}`,
-        price: Math.floor(Math.random() * 200) + 10,
-        image: 'https://via.placeholder.com/300',
-        category: ['Electronics', 'Fashion', 'Home', 'Beauty'][Math.floor(Math.random() * 4)],
+        name,
+        price,
+        image: categoryImages[cat] || require('@assets/product-images/bag.png'),
+        category: cat as string,
       } as Product;
     });
-    return { items: mockItems, total: 1000 };
+
+    // Apply search filter
+    if (params.search) {
+      const q = params.search.toLowerCase();
+      pool = pool.filter((p) => p.name.toLowerCase().includes(q));
+    }
+
+    // Apply sort
+    if (params.sort === 'asc' || params.sort === 'desc') {
+      pool.sort((a, b) => params.sort === 'asc' ? a.price - b.price : b.price - a.price);
+    }
+
+    // Paginate
+    const paged = pool.slice(start, start + params.pageSize);
+    return { items: paged, total: pool.length };
   }
 }
