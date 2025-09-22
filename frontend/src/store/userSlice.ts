@@ -10,11 +10,13 @@ export interface User {
 export interface UserState {
   user: User | null;
   isAuthenticated: boolean;
+  jwt?: string | null;
 }
 
 const initialState: UserState = {
   user: null,
   isAuthenticated: false,
+  jwt: null,
 };
 
 
@@ -26,9 +28,13 @@ const userSlice = createSlice({
       state.user = action.payload;
       state.isAuthenticated = true;
     },
+    setJwt(state, action: PayloadAction<string | null | undefined>) {
+      state.jwt = action.payload ?? null;
+    },
     logout(state) {
       state.user = null;
       state.isAuthenticated = false;
+      state.jwt = null;
     },
     register(state, action: PayloadAction<User>) {
       state.user = action.payload;
@@ -37,9 +43,10 @@ const userSlice = createSlice({
     setUser(state, action: PayloadAction<UserState>) {
       state.user = action.payload.user;
       state.isAuthenticated = action.payload.isAuthenticated;
+      state.jwt = action.payload.jwt ?? null;
     },
   },
 });
 
-export const { login, logout, register, setUser } = userSlice.actions;
+export const { login, logout, register, setUser, setJwt } = userSlice.actions;
 export default userSlice.reducer;

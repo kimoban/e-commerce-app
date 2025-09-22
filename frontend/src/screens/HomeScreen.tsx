@@ -1,12 +1,13 @@
 import { ProductsState } from '@store/productsSlice';
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Button, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Button, ActivityIndicator, Image } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 // Update the import path if your store file is named differently or located elsewhere
 import { RootState } from '@store'; // or update to the correct path, e.g., '../store/index'
+import { logout } from '@store/userSlice';
 
 import ProductCard from '@components/ProductCard';
 import SearchBar from '@components/SearchBar';
@@ -102,6 +103,22 @@ const HomeScreen = () => {
 
   return (
     <View className="flex-1 bg-white p-4">
+      {/* Top bar: user badge and sign out */}
+      <View className="flex-row items-center justify-between mb-2">
+        <Text className="text-xl font-semibold">EComShop</Text>
+        {user ? (
+          <View className="flex-row items-center">
+            <View className="w-8 h-8 rounded-full bg-brand-primary/10 items-center justify-center mr-2">
+              <Text className="text-brand-primary font-bold" accessibilityLabel={`Logged in as ${user.name}`}>
+                {user.name?.charAt(0)?.toUpperCase() || 'U'}
+              </Text>
+            </View>
+            <TouchableOpacity onPress={() => dispatch(logout())} accessibilityRole="button" accessibilityLabel="Sign out">
+              <Text className="text-red-600 font-semibold">Sign out</Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
+      </View>
       <Banner />
       <Text className="text-2xl font-bold mb-2">Products</Text>
       {user && user.role === 'admin' && (

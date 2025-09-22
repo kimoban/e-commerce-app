@@ -4,12 +4,13 @@ import { View, Text, KeyboardAvoidingView, Platform, TouchableOpacity, Image, Al
 import Input from '@components/Input';
 import Button from '@components/Button';
 import { useDispatch } from 'react-redux';
-import { login } from '@store/userSlice';
+import { login, setJwt } from '@store/userSlice';
 import { useNavigation } from '@react-navigation/native';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import * as Facebook from 'expo-auth-session/providers/facebook';
 import { ResponseType } from 'expo-auth-session';
+import { exchangeProviderToken } from '@services/auth';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -62,13 +63,12 @@ const LoginScreen = () => {
           setLoadingProvider('google');
           const accessToken = gResponse.authentication?.accessToken;
           if (!accessToken) throw new Error('No access token');
-          const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          });
-          const profile = await res.json();
-          const name = profile.name || profile.given_name || 'Google User';
-          const emailAddr = profile.email || '';
-          dispatch(login({ id: profile.sub || profile.id || 'google', name, email: emailAddr, role: 'user' }));
+          // Exchange with backend for our JWT
+          const exchange = await exchangeProviderToken('google', accessToken);
+          dispatch(setJwt(exchange.token));
+          const name = exchange.user.name || 'Google User';
+          const emailAddr = exchange.user.email || '';
+          dispatch(login({ id: exchange.user.id, name, email: emailAddr, role: exchange.user.role || 'user' }));
         } catch (e: any) {
           Alert.alert('Google Sign-in failed', e?.message || 'Please try again.');
         } finally {
@@ -94,13 +94,11 @@ const LoginScreen = () => {
           setLoadingProvider('facebook');
           const accessToken = fbResponse.authentication?.accessToken;
           if (!accessToken) throw new Error('No access token');
-          const res = await fetch(
-            `https://graph.facebook.com/me?fields=id,name,email,picture&access_token=${encodeURIComponent(accessToken)}`
-          );
-          const profile = await res.json();
-          const name = profile.name || 'Facebook User';
-          const emailAddr = profile.email || '';
-          dispatch(login({ id: profile.id || 'facebook', name, email: emailAddr, role: 'user' }));
+          const exchange = await exchangeProviderToken('facebook', accessToken);
+          dispatch(setJwt(exchange.token));
+          const name = exchange.user.name || 'Facebook User';
+          const emailAddr = exchange.user.email || '';
+          dispatch(login({ id: exchange.user.id, name, email: emailAddr, role: exchange.user.role || 'user' }));
         } catch (e: any) {
           Alert.alert('Facebook Sign-in failed', e?.message || 'Please try again.');
         } finally {
