@@ -3,11 +3,11 @@
   "builds": [
     { "src": "package.json", "use": "@vercel/static-build" }
   ],
-  "buildCommand": "npm run build:web",
+  "buildCommand": "npm run vercel-build",
   "outputDirectory": "dist",
   "framework": null,
-  "redirects": [
-    { "source": "/(.*)", "destination": "/$1", "permanent": true }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
     {
