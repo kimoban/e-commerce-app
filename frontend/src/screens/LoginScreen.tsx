@@ -111,6 +111,7 @@ const LoginScreen = () => {
 
   const isWeb = Platform.OS === 'web';
   const windowHeight = isWeb ? Dimensions.get('window').height : undefined;
+  const __DEV__FLAG = (global as any)?.__DEV__ ?? process.env.NODE_ENV !== 'production';
 
   return (
     <View className="flex-1 bg-gray-50">
@@ -208,6 +209,25 @@ const LoginScreen = () => {
                     )}
                   </TouchableOpacity>
                 </View>
+                {__DEV__FLAG && (
+                  <View className="mt-3 items-center">
+                    <TouchableOpacity
+                      accessibilityRole="button"
+                      accessibilityLabel="Test exchange endpoint"
+                      className="px-3 py-2 rounded-md bg-yellow-100"
+                      onPress={async () => {
+                        try {
+                          const res = await exchangeProviderToken('google', 'dev-token-livecheck');
+                          Alert.alert('Exchange OK', `User: ${res.user.email || res.user.name}`);
+                        } catch (e: any) {
+                          Alert.alert('Exchange failed', e?.message || 'Unknown error');
+                        }
+                      }}
+                    >
+                      <Text className="text-yellow-800">Dev: Test Exchange</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
 
               <View className="flex-row justify-center mt-4">
