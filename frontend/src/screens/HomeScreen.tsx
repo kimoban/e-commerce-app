@@ -120,6 +120,17 @@ const HomeScreen = () => {
         ) : null}
       </View>
       <Banner />
+      {/* Minimal error banner for 401 Unauthorized */}
+      {typeof (error) === 'string' && /unauthorized|401/i.test(error) && (
+        <View className="bg-red-50 border border-red-200 rounded-lg p-3 mb-3">
+          <Text className="text-red-700 mb-2">Your session has expired. Please sign in again.</Text>
+          <View className="flex-row">
+            <TouchableOpacity onPress={() => navigation.navigate('Login' as any)} accessibilityRole="button" accessibilityLabel="Sign in again">
+              <Text className="text-brand-primary font-semibold">Sign in again</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
       <Text className="text-2xl font-bold mb-2">Products</Text>
       {user && user.role === 'admin' && (
         <Button title="Admin: Manage Products" onPress={() => navigation.navigate('AdminProductManagement')} />
