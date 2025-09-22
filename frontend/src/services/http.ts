@@ -1,6 +1,13 @@
 import ENV from '@config/env';
-import { store } from '@store';
-import { logout } from '@store/userSlice';
+
+// Hooks configured by the app after the store is created to avoid circular deps
+let getToken: (() => string | null | undefined) | null = null;
+let onUnauthorized: (() => void) | null = null;
+
+export function setAuthHooks(opts: { getToken: () => string | null | undefined; onUnauthorized: () => void }) {
+  getToken = opts.getToken;
+  onUnauthorized = opts.onUnauthorized;
+}
 
 function shouldAttachAuth(url: string) {
   try {
@@ -14,8 +21,7 @@ function shouldAttachAuth(url: string) {
 }
 
 export async function apiFetch(input: RequestInfo | URL, init: RequestInit = {}): Promise<Response> {
-  const state: any = store.getState();
-  const jwt: string | undefined | null = state?.user?.jwt;
+  const jwt: string | undefined | null = getToken ? getToken() : null;
 
   let urlStr: string;
   if (typeof input === 'string') urlStr = input;
@@ -29,8 +35,8 @@ export async function apiFetch(input: RequestInfo | URL, init: RequestInit = {})
 
   const response = await fetch(urlStr, { ...init, headers });
   if (response.status === 401) {
-    // Unauthorized: log out user and surface error
-    try { store.dispatch(logout()); } catch {}
+    // Unauthorized: trigger handler and surface error
+    try { onUnauthorized && onUnauthorized(); } catch {}
     throw new Error('Unauthorized');
   }
   return response;

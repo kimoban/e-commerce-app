@@ -6,6 +6,8 @@ import userReducer, { setUser, login as loginAction, logout as logoutAction, reg
 import wishlistReducer, { setWishlist } from './wishlistSlice';
 import ordersReducer from './ordersSlice';
 import { loadData, saveData } from '../utils/storage';
+import { setAuthHooks } from '@services/http';
+import { logout as doLogout } from './userSlice';
 
 // Persist filters to AsyncStorage when they change
 const listenerMiddleware = createListenerMiddleware();
@@ -46,6 +48,17 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().prepend(listenerMiddleware.middleware),
+});
+
+// Provide auth hooks to the HTTP layer now that store exists
+setAuthHooks({
+  getToken: () => {
+    const state: any = store.getState();
+    return state?.user?.jwt ?? null;
+  },
+  onUnauthorized: () => {
+    try { store.dispatch(doLogout()); } catch {}
+  },
 });
 
 // Hydrate persisted state on app start
