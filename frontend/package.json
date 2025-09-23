@@ -7,8 +7,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "vercel-build": "npm run build:web",
-  "build:web": "expo export --platform web --output-dir dist",
+    "optimize-images": "node scripts/optimize-images.mjs",
+    "vercel-build": "npm run optimize-images && npm run build:web",
+    "build:web": "expo export --platform web --output-dir dist",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -38,6 +39,7 @@
     "@types/react-navigation": "^3.0.8",
     "autoprefixer": "^10.4.21",
     "babel-plugin-module-resolver": "^5.0.2",
+    "sharp": "^0.33.4",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
     "typescript": "~5.9.2"
