@@ -18,15 +18,19 @@ export type FetchProductsResponse = {
 };
 
 export async function fetchProducts(params: FetchProductsParams): Promise<FetchProductsResponse> {
-  const url = new URL(ENDPOINTS.products, ENV.API_URL);
-  url.searchParams.set('page', String(params.page));
-  url.searchParams.set('limit', String(params.pageSize));
-  if (params.category && params.category !== 'All') url.searchParams.set('category', params.category);
-  if (params.search) url.searchParams.set('q', params.search);
-  if (params.sort) url.searchParams.set('sort', params.sort === 'asc' ? 'price' : '-price');
-
   try {
-  const res = await apiFetch(url.toString());
+    // Ensure base URL exists; if not, use mock data fallback
+    if (!ENV.API_URL) {
+      throw new Error('ENV.API_URL is not set');
+    }
+    const url = new URL(ENDPOINTS.products, ENV.API_URL);
+    url.searchParams.set('page', String(params.page));
+    url.searchParams.set('limit', String(params.pageSize));
+    if (params.category && params.category !== 'All') url.searchParams.set('category', params.category);
+    if (params.search) url.searchParams.set('q', params.search);
+    if (params.sort) url.searchParams.set('sort', params.sort === 'asc' ? 'price' : '-price');
+
+    const res = await apiFetch(url.toString());
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     // Accept various shapes: {items,total} | {data,total} | []
