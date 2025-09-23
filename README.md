@@ -16,6 +16,7 @@ A modern, full-stack e-commerce mobile application built with Django REST framew
 - [Environment Variables](#environment-variables)
 - [Customization & Branding](#customization--branding)
 - [Scripts](#scripts)
+- [Deploy to Vercel](#deploy-to-vercel)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 - [License](#license)
@@ -163,6 +164,79 @@ E-Commerce/
 - `npm run android` — Run on Android emulator/device
 - `npm run ios` — Run on iOS simulator/device (macOS only)
 - `npm run web` — Run in web browser
+
+## Deploy to Vercel
+
+Static web deploys are supported via Expo’s web export and a Vercel static build.
+
+### One-time setup
+
+- Ensure your backend API is reachable from the public internet and has CORS configured to allow your Vercel domain(s).
+- In Google/Facebook developer consoles, include your Vercel domain in allowed origins / redirect URIs for social login.
+
+### Vercel project settings
+
+This repository contains `frontend/vercel.json` and scripts tailored for static export.
+
+- Root Directory: `frontend`
+- Build Command: `npm run vercel-build`
+- Output Directory: `dist`
+- Framework: Other (or leave auto) — `vercel.json` sets `framework: null`.
+
+Notes:
+
+- If Vercel warns that Project Settings are ignored, that’s expected — `builds` in `vercel.json` take precedence.
+
+### Environment variables (Vercel → Settings → Environment Variables)
+
+Use UPPERCASE letters, digits, and underscores; names must not start with a digit.
+
+- `API_URL` — Your Django API base URL (e.g., `https://your-api.example.com`)
+- `EXPO_PUBLIC_FACEBOOK_APP_ID`
+- `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`
+- `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID` (optional for web)
+- `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID` (optional for web)
+
+Expo injects these at build-time. Changing them requires a new deploy.
+
+### What the build does
+
+`npm run vercel-build` runs two steps:
+
+1) `npm run optimize-images`
+    - Creates lossy `.webp` copies alongside `.png`/`.jpg` in:
+       - `src/assets/product-images`
+       - `src/assets/images`
+       - `src/assets`
+    - Safe to re-run. Skips files that already have `.webp`.
+
+2) `npm run build:web`
+    - Runs `expo export --platform web --output-dir dist` to create a static site.
+
+### Routing and caching
+
+- SPA rewrites: All routes rewrite to `index.html`.
+- Caching (configured in `frontend/vercel.json`):
+   - `index.html` — `Cache-Control: no-cache` (ensures users get the latest HTML).
+   - Hashed/static assets (e.g., `/_expo/static/**`, `*.js|css|png|jpg|jpeg|webp|svg|ico`) — `Cache-Control: public, max-age=31536000, immutable`.
+   - Other assets — `Cache-Control: public, max-age=600`.
+
+### Local verification
+
+- From `frontend/`:
+     - `npm ci` (or `npm install`)
+   - `npm run optimize-images`
+   - `npm run build:web`
+   - Optionally serve `dist/` locally with your favorite static server to smoke test.
+
+### Troubleshooting deploys
+
+- Missing script: `Missing required "vercel-build" script` → ensure `package.json` has `"vercel-build"`.
+- Dynamic require of assets fails on export → Use static `require('path/to/file.ext')` entries; dynamic paths cannot be statically analyzed.
+- 404s on deep links → Verify SPA rewrites to `index.html` are present.
+- CORS errors calling the API → Add your Vercel domain(s) to Django CORS allow-list; ensure HTTPS.
+- Social login errors → Add Vercel domain to Google/Facebook app configs; verify redirect URIs.
+
 
 ## Troubleshooting
 
