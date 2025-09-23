@@ -1,7 +1,14 @@
 #!/usr/bin/env node
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
-import sharp from 'sharp';
+let sharp;
+try {
+  // Optional dependency; skip if not installed or fails to load
+  sharp = (await import('sharp')).default;
+} catch (err) {
+  console.warn('optimize-images: sharp not available, skipping WebP generation');
+  process.exit(0);
+}
 
 // Optimize images across asset folders by creating .webp copies (lossy) for web builds
 const projectRoot = process.cwd();

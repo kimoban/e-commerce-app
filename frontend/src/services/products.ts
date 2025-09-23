@@ -1,6 +1,6 @@
 import { ENDPOINTS } from '@config/api';
 import ENV from '@config/env';
-import { Platform } from 'react-native';
+// Note: Avoid platform-specific image requires that may not exist at build time.
 import type { Product } from '@store/productsSlice';
 import { apiFetch } from './http';
 
@@ -39,16 +39,8 @@ export async function fetchProducts(params: FetchProductsParams): Promise<FetchP
   } catch (e) {
     // Fallback mock to keep the UI functional in dev without backend
     // Use static requires so Metro/Expo bundlers can resolve assets.
-    // We generate .webp copies during build; prefer them on web, fallback to .png on native.
-    const categoryImagesWeb: Record<string, any> = {
-      Electronics: require('@assets/product-images/Computer.webp'),
-      Fashion: require('@assets/product-images/canvas shoe.webp'),
-      Home: require('@assets/product-images/bag.webp'),
-      Beauty: require('@assets/product-images/camera.webp'),
-      Accessories: require('@assets/product-images/headphone.webp'),
-      Automotive: require('@assets/product-images/car.webp'),
-    };
-    const categoryImagesNative: Record<string, any> = {
+    // Always require PNG assets that are committed; optional WebP copies (if any) are not required.
+    const categoryImages: Record<string, any> = {
       Electronics: require('@assets/product-images/Computer.png'),
       Fashion: require('@assets/product-images/canvas shoe.png'),
       Home: require('@assets/product-images/bag.png'),
@@ -56,7 +48,6 @@ export async function fetchProducts(params: FetchProductsParams): Promise<FetchP
       Accessories: require('@assets/product-images/headphone.png'),
       Automotive: require('@assets/product-images/car.png'),
     };
-    const categoryImages = Platform.OS === 'web' ? categoryImagesWeb : categoryImagesNative;
     const start = (params.page - 1) * params.pageSize;
     const categoriesPool = ['Electronics', 'Fashion', 'Home', 'Beauty', 'Accessories', 'Automotive'] as const;
     const selectedCat = params.category && params.category !== 'All' ? (params.category as any) : null;
