@@ -34,12 +34,9 @@
   ],
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!.*\\.).*)",
       "destination": "/index.html"
     }
-  ],
-  "routes": [
-    { "handle": "filesystem" }
   ],
   "cleanUrls": true
 }
