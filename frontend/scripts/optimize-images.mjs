@@ -3,9 +3,13 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
 
-// Optimize images in src/assets/product-images for web export by creating .webp copies
+// Optimize images across asset folders by creating .webp copies (lossy) for web builds
 const projectRoot = process.cwd();
-const imagesDir = path.join(projectRoot, 'src', 'assets', 'product-images');
+const targetDirs = [
+  path.join(projectRoot, 'src', 'assets', 'product-images'),
+  path.join(projectRoot, 'src', 'assets', 'images'),
+  path.join(projectRoot, 'src', 'assets'),
+];
 
 async function ensureDir(p) {
   await fs.mkdir(p, { recursive: true });
@@ -24,24 +28,26 @@ async function createWebp(inputPath, outPath) {
 
 async function run() {
   const exts = new Set(['.png', '.jpg', '.jpeg']);
-  let count = 0;
-  try {
-    const entries = await fs.readdir(imagesDir, { withFileTypes: true });
-    for (const e of entries) {
-      if (!e.isFile()) continue;
-      const ext = path.extname(e.name).toLowerCase();
-      if (!exts.has(ext)) continue;
-      const srcPath = path.join(imagesDir, e.name);
-      const base = e.name.slice(0, -ext.length);
-      const outPath = path.join(imagesDir, `${base}.webp`);
-      if (await fileExists(outPath)) continue; // skip if already exists
-      await createWebp(srcPath, outPath);
-      count++;
+  let total = 0;
+  for (const dir of targetDirs) {
+    try {
+      const entries = await fs.readdir(dir, { withFileTypes: true });
+      for (const e of entries) {
+        if (!e.isFile()) continue;
+        const ext = path.extname(e.name).toLowerCase();
+        if (!exts.has(ext)) continue;
+        const srcPath = path.join(dir, e.name);
+        const base = e.name.slice(0, -ext.length);
+        const outPath = path.join(dir, `${base}.webp`);
+        if (await fileExists(outPath)) continue; // skip if already exists
+        await createWebp(srcPath, outPath);
+        total++;
+      }
+    } catch (err) {
+      // Non-fatal: directory may not exist in all projects
     }
-    console.log(`optimize-images: created ${count} webp files`);
-  } catch (err) {
-    console.warn('optimize-images: skipped (dir missing or other non-fatal issue):', err?.message || err);
   }
+  console.log(`optimize-images: created ${total} webp files`);
 }
 
 run();
