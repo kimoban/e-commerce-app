@@ -82,7 +82,8 @@ const LoginScreen = () => {
   // Facebook Auth
   const facebookConfigured = !!env.EXPO_PUBLIC_FACEBOOK_APP_ID;
   const [fbRequest, fbResponse, fbPromptAsync] = Facebook.useAuthRequest({
-    clientId: env.EXPO_PUBLIC_FACEBOOK_APP_ID,
+    // Provide a safe fallback to avoid invariant throws during initialization
+    clientId: env.EXPO_PUBLIC_FACEBOOK_APP_ID || 'disabled-facebook-app-id',
     responseType: ResponseType.Token,
     scopes: ['public_profile', 'email'],
   });
@@ -176,7 +177,7 @@ const LoginScreen = () => {
                     onPress={() => {
                       if (!fbRequest) return;
                       if (!facebookConfigured) {
-                        Alert.alert('Missing configuration', 'FACEBOOK_APP_ID is not set.');
+                        Alert.alert('Missing configuration', 'Facebook App ID is not set for this environment.');
                         return;
                       }
                       fbPromptAsync();
