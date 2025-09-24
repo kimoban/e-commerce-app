@@ -65,6 +65,12 @@ frontend/
 └── vercel.json
 ```
 
+## Architecture
+
+![Architecture Diagram](./docs/architecture.svg)
+
+High-level flow: Screens/Components interact with Redux state via actions/selectors; async actions call Services (http/products/auth) which attach JWT only for API-origin requests; web export produces `dist/` served by Vercel with SPA rewrites and caching.
+
 ## Getting Started
 
 ### Prerequisites
@@ -150,7 +156,59 @@ Notes:
   npm run typecheck
   ```
 
-> Note: Frontend unit/e2e tests are not yet set up. Consider adding Jest/React Testing Library and Detox/Playwright for critical flows.
+### Unit tests (Jest) — minimal scaffold
+
+1) Install dev dependencies:
+
+    ```sh
+    npm install -D jest @types/jest ts-jest
+    ```
+
+2) Add Jest config `jest.config.js`:
+
+    ```js
+    module.exports = {
+       preset: 'ts-jest',
+       testEnvironment: 'node',
+       roots: ['<rootDir>/src'],
+       testMatch: ['**/__tests__/**/*.test.(ts|tsx)'],
+       moduleNameMapper: {
+          '^@components/(.*)$': '<rootDir>/src/components/$1',
+          '^@screens/(.*)$': '<rootDir>/src/screens/$1',
+          '^@store/(.*)$': '<rootDir>/src/store/$1',
+          '^@config/(.*)$': '<rootDir>/src/config/$1',
+          '^@services/(.*)$': '<rootDir>/src/services/$1',
+       },
+    };
+    ```
+
+3) Sample test at `src/utils/__tests__/currency.test.ts`:
+
+    ```ts
+    import { formatCurrency } from '../../utils/currency';
+
+    describe('formatCurrency', () => {
+       it('formats numbers as GH₵ currency', () => {
+          expect(formatCurrency(1234.56)).toContain('GH₵');
+       });
+    });
+    ```
+
+4) Add script to `package.json`:
+
+    ```json
+    {
+       "scripts": {
+          "test": "jest"
+       }
+    }
+    ```
+
+Run tests:
+
+```sh
+npm test
+```
 
 ## License
 

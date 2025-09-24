@@ -10,7 +10,8 @@
     "optimize-images": "node scripts/optimize-images.mjs",
     "vercel-build": "npm run optimize-images && npm run build:web",
     "build:web": "expo export --platform web --output-dir dist",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "jest"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
@@ -19,7 +20,7 @@
     "@react-navigation/native-stack": "^7.3.26",
     "@react-navigation/stack": "^7.4.8",
     "@reduxjs/toolkit": "^2.1.0",
-  "expo": "~54.0.10",
+    "expo": "~54.0.10",
     "expo-auth-session": "^7.0.8",
     "expo-linear-gradient": "^15.0.7",
     "expo-status-bar": "^3.0.8",
@@ -35,13 +36,16 @@
     "react-redux": "^9.2.0"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/react": "^19.1.13",
     "@types/react-navigation": "^3.0.8",
     "autoprefixer": "^10.4.21",
     "babel-plugin-module-resolver": "^5.0.2",
-    "sharp": "^0.33.4",
+    "jest": "^30.1.3",
     "postcss": "^8.5.6",
+    "sharp": "^0.33.4",
     "tailwindcss": "^3.4.17",
+    "ts-jest": "^29.4.4",
     "typescript": "~5.9.2"
   }
 }

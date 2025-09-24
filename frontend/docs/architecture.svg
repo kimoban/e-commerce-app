@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="380" viewBox="0 0 820 380" role="img" aria-labelledby="title desc">
+    <title id="title">EComShop Frontend Architecture</title>
+    <desc id="desc">High-level data and navigation flow for the Expo frontend.</desc>
+    <defs>
+        <style>
+      .box { fill: #ffffff; stroke: #1f2937; stroke-width: 2; rx: 8; }
+      .title { font: 700 14px 'Segoe UI', sans-serif; fill: #111827; }
+      .text { font: 12px 'Segoe UI', sans-serif; fill: #374151; }
+      .arrow { stroke: #6b7280; stroke-width: 2; marker-end: url(#arrowhead); }
+        </style>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280" />
+        </marker>
+    </defs>
+
+    <!-- UI Layer -->
+    <rect class="box" x="30" y="30" width="230" height="120" />
+    <text class="title" x="45" y="55">Screens & Components</text>
+    <text class="text" x="45" y="80">• Login, Home, ProductList</text>
+    <text class="text" x="45" y="100">• ProductCard, Button, Input</text>
+    <text class="text" x="45" y="120">• React Navigation</text>
+
+    <!-- State Layer -->
+    <rect class="box" x="300" y="30" width="230" height="120" />
+    <text class="title" x="315" y="55">Redux Store</text>
+    <text class="text" x="315" y="80">• productsSlice, userSlice</text>
+    <text class="text" x="315" y="100">• cart/wishlist/orders (future)</text>
+    <text class="text" x="315" y="120">• Typed selectors, thunks</text>
+
+    <!-- Services Layer -->
+    <rect class="box" x="570" y="30" width="220" height="120" />
+    <text class="title" x="585" y="55">Services</text>
+    <text class="text" x="585" y="80">• http.ts (JWT attach, 401)</text>
+    <text class="text" x="585" y="100">• products.ts, auth.ts</text>
+    <text class="text" x="585" y="120">• config/api.ts, env</text>
+
+    <!-- Assets/Styling -->
+    <rect class="box" x="30" y="200" width="230" height="120" />
+    <text class="title" x="45" y="225">Styling & Assets</text>
+    <text class="text" x="45" y="250">• NativeWind/Tailwind</text>
+    <text class="text" x="45" y="270">• Static requires for export</text>
+    <text class="text" x="45" y="290">• WebP optimization (optional)</text>
+
+    <!-- Deployment -->
+    <rect class="box" x="300" y="200" width="230" height="120" />
+    <text class="title" x="315" y="225">Web Deployment</text>
+    <text class="text" x="315" y="250">• expo export → dist/</text>
+    <text class="text" x="315" y="270">• vercel.json (SPA rewrites)</text>
+    <text class="text" x="315" y="290">• Caching headers</text>
+
+    <!-- Arrows -->
+    <line class="arrow" x1="260" y1="90" x2="300" y2="90" />
+    <line class="arrow" x1="530" y1="90" x2="570" y2="90" />
+    <line class="arrow" x1="145" y1="150" x2="145" y2="200" />
+    <line class="arrow" x1="415" y1="150" x2="415" y2="200" />
+</svg>
