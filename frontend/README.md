@@ -1,50 +1,23 @@
 # EComShop Frontend (Expo SDK 54)
 
-React Native app (web + mobile) using Expo, TypeScript, Redux Toolkit, NativeWind/Tailwind, and React Navigation. Web export is deployed as a static site.
+Frontend app for the E-Commerce project, built with Expo (React Native + Web), TypeScript, Redux Toolkit, NativeWind/Tailwind, and React Navigation. Web is exported as a static site and deployed to Vercel.
 
-## Commands
+## Features
 
-- Start dev server: `npx expo start`
-- Android: `npm run android`
-- iOS (macOS): `npm run ios`
-- Web dev: `npm run web`
-- Web export: `npm run build:web` → outputs `dist/`
-- Vercel build: `npm run vercel-build` (runs image optimize + export)
+- Product catalog with infinite scroll, search, category filter, and sort
+- Email/password login; Google/Facebook OAuth via Expo AuthSession
+- Centralized HTTP with JWT attach and 401 handling
+- Responsive UI with NativeWind; accessibility-friendly components
+- Mock-data fallback when `API_URL` isn’t configured (web remains usable)
 
-## Environment
+## Tech Stack
 
-Configure `frontend/.env` (or Vercel env):
-
-- `API_URL` — Backend base URL
-- `EXPO_PUBLIC_FACEBOOK_APP_ID`
-- `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`
-- `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID` (mobile)
-- `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID` (mobile)
-
-Note: The app will still render if `API_URL` is missing; it falls back to mock data for product lists.
-
-## Web deployment (Vercel)
-
-Vercel config is in `vercel.json`:
-
-- Build Command: `npm run vercel-build`
-- Output Directory: `dist`
-- SPA rewrites only for routes without a file extension: `/((?!.*\.).*)`
-- Caching headers: `index.html` no-cache; static assets immutable
-
-The `optimize-images` script is optional; if `sharp` is unavailable, it skips generation.
-
-## Android quickstart
-
-1) Install Expo Go on your device or start an Android emulator.
-2) Run `npx expo start` and press `a` for emulator, or scan the QR with Expo Go.
-3) Ensure the device and PC are on the same network.
-
-## Notes
-
-- NativeWind/Tailwind is configured in `babel.config.js` and PostCSS.
-- Module aliases are set (e.g., `@components`, `@screens`, `@store`, `@config`, `@services`).
-- Facebook/Google auth use Expo AuthSession; missing web client IDs keep UI disabled instead of crashing.
+- Node.js 18+ (dev), Expo SDK 54
+- React Native 0.81.x, React 19, TypeScript
+- Redux Toolkit, React Redux
+- NativeWind/TailwindCSS
+- React Navigation (stack/bottom-tabs)
+- Expo AuthSession, WebBrowser, StatusBar, LinearGradient
 
 ## Project Structure
 
@@ -92,18 +65,96 @@ frontend/
 └── vercel.json
 ```
 
-## Accessibility
+## Getting Started
 
-- Buttons use `accessibilityRole="button"` and labels; touch targets are >= 44px.
-- Selected state uses `accessibilityState` where appropriate.
+### Prerequisites
 
-## Currency formatting (GH₵)
+- Node.js 18+ and npm (or Yarn/PNPM)
+- Expo CLI (bundled via `npx expo`)
+- Android Studio + emulator, or Expo Go on a physical device
+- Optional: Xcode + iOS Simulator (macOS only)
 
-- `src/utils/currency.ts` exports `formatCurrency(value: number)`
-- Uses `Intl.NumberFormat('en-GH', { currency: 'GHS' })` with a safe fallback
+### Setup
+
+1. Install dependencies:
+
+   ```sh
+   npm install
+   ```
+
+2. Configure environment variables (see “Environment Variables”). For local dev, you can create a `.env` or use your shell environment.
+
+3. Start the dev server:
+
+   ```sh
+   npx expo start
+   ```
+
+4. Run on targets:
+
+   - Android emulator or device: `npm run android`
+   - iOS simulator (macOS): `npm run ios`
+   - Web: `npm run web`
+
+5. Export for web (static):
+
+   ```sh
+   npm run build:web
+   # Output in dist/
+   ```
+
+## Environment Variables
+
+Set via your `.env`, OS environment, or Vercel env settings:
+
+- `API_URL` — Backend base URL
+- `EXPO_PUBLIC_FACEBOOK_APP_ID`
+- `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`
+- `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID` (mobile)
+- `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID` (mobile)
+
+Notes:
+
+- Web builds read these at build time; redeploy when changing them
+- If `API_URL` is missing, the app shows mock product data and stays usable
+
+## Deployment (Web / Vercel)
+
+- `vercel.json` controls build (`npm run vercel-build`), output (`dist`), and SPA rewrites
+- SPA rewrites only for URLs without a file extension: `/((?!.*\.).*)`
+- Caching: `index.html` no-cache; static assets immutable
+- `optimize-images` generates WebP if `sharp` is installed (optional)
+
+## Scripts
+
+- Start dev server: `npx expo start`
+- Android: `npm run android`
+- iOS (macOS): `npm run ios`
+- Web dev: `npm run web`
+- Web export: `npm run build:web` → `dist/`
+- Vercel build: `npm run vercel-build` (optimize images + export)
+- Typecheck: `npm run typecheck`
 
 ## Troubleshooting
 
 - Clear Metro cache: `npx expo start --clear`
-- Asset require errors on web export → replace dynamic requires with static `require()` entries
-- Blank page on web → ensure env vars set, SPA rewrite excludes asset requests, and check browser console
+- Blank page on web: check env vars, SPA rewrite, and browser console
+- Asset bundling errors: use static `require()` paths (no dynamic requires)
+- CORS/API errors: ensure backend `CORS_ALLOWED_ORIGINS` includes your Vercel domain
+
+## Testing
+
+- Type checking (TS):
+
+  ```sh
+  npm run typecheck
+  ```
+
+> Note: Frontend unit/e2e tests are not yet set up. Consider adding Jest/React Testing Library and Detox/Playwright for critical flows.
+
+## License
+
+[ISAIAH KIMOBAN N-YILYAL](../LICENSE)
+
+---
+> This frontend delivers a polished cross-platform experience and pairs with the Django backend for a complete E-Commerce stack.
