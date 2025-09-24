@@ -62,20 +62,49 @@ A modern, full-stack e-commerce application built with Django REST Framework (ba
 
 ```bash
 E-Commerce/
-├── backend/                # Django backend (API, models, auth, etc.)
-├── frontend/               # Expo React Native app
-│   ├── assets/             # Images, icons, branding
-│   ├── components/         # Reusable UI components
-│   ├── navigation/         # Navigation setup
-│   ├── screens/            # App screens (Home, ProductList, Cart, etc.)
-│   ├── store/              # Redux slices and store
-│   ├── App.tsx             # App entry point
-│   ├── index.ts            # Expo entry point
-│   ├── babel.config.js     # Babel config for Expo/NativeWind
-│   ├── tailwind.config.js  # Tailwind CSS config
-│   ├── nativewind.config.js# NativeWind config
-│   └── ...
-└── README.md
+├── backend/                        # Django backend (API, models, auth, etc.)
+│   ├── ecommerce/                  # Django project
+│   │   ├── settings.py             # Settings (DB, CORS, JWT, static)
+│   │   ├── urls.py                 # Root urls (includes products/users, swagger)
+│   │   ├── views_and_root_urls.py  # Any root views
+│   │   ├── wsgi.py / asgi.py       # Entrypoints
+│   │   └── celery.py               # Celery config (broker/result)
+│   ├── products/                   # Product app
+│   │   ├── models.py               # Product/Category models
+│   │   ├── views.py                # ViewSets with page/limit/q/category/sort
+│   │   ├── serializers.py          # DRF serializers
+│   │   ├── urls.py                 # Router for products/categories
+│   │   └── tests/                  # Tests for product endpoints
+│   ├── users/                      # Users/Auth app
+│   │   ├── views.py                # Register, forgot password, token exchange
+│   │   ├── urls.py                 # /api/auth/... endpoints
+│   │   └── tests.py                # Tests (e.g., provider exchange)
+│   ├── manage.py                   # Django management
+│   ├── requirements.txt            # Python deps
+│   └── README.md                   # Backend docs
+│
+├── frontend/                       # Expo React Native app
+│   ├── src/
+│   │   ├── assets/                 # Images, icons, product images
+│   │   ├── components/             # Reusable UI components
+│   │   ├── config/                 # API endpoints, env reader
+│   │   ├── navigation/             # Navigation setup
+│   │   ├── screens/                # Screens (Login, Home, etc.)
+│   │   ├── services/               # API wrappers (http, auth, products)
+│   │   ├── store/                  # Redux slices and store
+│   │   ├── utils/                  # Helpers (currency, etc.)
+│   │   └── App.tsx                 # App root
+│   ├── app.json                    # Expo app config
+│   ├── babel.config.js             # Babel/NativeWind config
+│   ├── tailwind.config.js          # Tailwind config
+│   ├── postcss.config.js           # PostCSS config
+│   ├── vercel.json                 # Static web deploy config
+│   ├── scripts/optimize-images.mjs # Optional WebP generation
+│   ├── package.json                # Scripts (vercel-build, build:web, etc.)
+│   └── README.md                   # Frontend docs
+│
+├── README.md                       # Root docs
+└── render.yaml                     # Example deploy config (if used)
 ```
 
 ## Getting Started
@@ -191,7 +220,7 @@ Static web deploys are supported via Expo’s web export and a Vercel static bui
 - Build Command: `npm run vercel-build`
 - Output Directory: `dist`
 - Framework: Other (or leave auto) — `framework: null` is set in `vercel.json`.
-   - Note: Project Settings may be ignored because `builds` is defined in `vercel.json`.
+     Note: Project Settings may be ignored because `builds` is defined in `vercel.json`.
 
 ### Environment variables (Vercel → Settings → Environment Variables)
 

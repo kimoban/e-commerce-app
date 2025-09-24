@@ -46,6 +46,52 @@ The `optimize-images` script is optional; if `sharp` is unavailable, it skips ge
 - Module aliases are set (e.g., `@components`, `@screens`, `@store`, `@config`, `@services`).
 - Facebook/Google auth use Expo AuthSession; missing web client IDs keep UI disabled instead of crashing.
 
+## Project Structure
+
+```bash
+frontend/
+├── app.json
+├── App.tsx
+├── babel.config.js
+├── metro.config.js
+├── nativewind-env.d.ts
+├── package.json
+├── postcss.config.js
+├── scripts/
+│   └── optimize-images.mjs
+├── src/
+│   ├── App.tsx
+│   ├── assets/
+│   │   ├── icons/
+│   │   ├── images/
+│   │   └── product-images/
+│   ├── components/
+│   │   ├── Button.tsx
+│   │   ├── Input.tsx
+│   │   ├── ProductCard.tsx
+│   │   └── ...
+│   ├── config/
+│   │   ├── api.ts
+│   │   └── env.ts
+│   ├── navigation/
+│   ├── screens/
+│   │   └── LoginScreen.tsx
+│   ├── services/
+│   │   ├── auth.ts
+│   │   ├── http.ts
+│   │   └── products.ts
+│   ├── store/
+│   │   ├── index.ts
+│   │   ├── productsSlice.ts
+│   │   ├── userSlice.ts
+│   │   └── ...
+│   └── utils/
+│       └── currency.ts
+├── tailwind.config.js
+├── tsconfig.json
+└── vercel.json
+```
+
 ## Accessibility
 
 - Buttons use `accessibilityRole="button"` and labels; touch targets are >= 44px.

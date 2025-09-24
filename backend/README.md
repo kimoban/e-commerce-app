@@ -22,14 +22,32 @@ Backend API for the E-Commerce app, built with Django and Django REST Framework.
 
 ```bash
 backend/
-├── ecommerce/           # Django project settings
-│   ├── settings.py      # Main settings (configure DB, JWT, etc.)
-│   ├── urls.py          # Project URL routing
-│   └── ...
-├── products/            # Product app (models, views, serializers)
-├── users/               # User app (models, views, serializers)
-├── manage.py            # Django management script
-└── requirements.txt     # Python dependencies
+├── ecommerce/
+│   ├── asgi.py
+│   ├── celery.py
+│   ├── settings.py        # Settings (DATABASE_URL, CORS, JWT, static)
+│   ├── urls.py            # Root URLConf (swagger/redoc, includes apps)
+│   ├── views_and_root_urls.py
+│   ├── wsgi.py
+│   └── __init__.py
+├── products/
+│   ├── admin.py
+│   ├── apps.py
+│   ├── migrations/
+│   ├── models.py
+│   ├── serializers.py
+│   ├── urls.py            # Registers routers for products/categories
+│   ├── views.py           # Pagination via page/limit, q, category, sort
+│   ├── tests/
+│   │   └── tests.py
+│   └── __init__.py
+├── users/
+│   ├── urls.py            # /api/auth/register, /password/forgot, /google/exchange, /facebook/exchange
+│   ├── views.py           # Exchange providers, register, forgot password
+│   └── __init__.py
+├── manage.py
+├── requirements.txt
+└── README.md
 ```
 
 ## Getting Started
