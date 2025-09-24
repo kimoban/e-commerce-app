@@ -1,129 +1,151 @@
-# EComShop Frontend — Slide Deck
-
-A concise, presentation-ready overview of the Expo (React Native) frontend.
+# EComShop Frontend Slide Deck
 
 ---
 
-## 1. What is this?
+## Project Overview
 
-- Expo React Native app (SDK 54) with web export
-- TypeScript, Redux Toolkit, NativeWind/Tailwind, React Navigation
-- Deployed to web as static site (Vercel) and to devices via Expo
-
----
-
-## 2. Core Features
-
-- Product catalog: infinite scroll, search, category filter, price sort
-- Auth: Email/password + Google/Facebook (via AuthSession)
-- Centralized HTTP with JWT attach, 401 handling
-- Responsive UI with NativeWind + accessibility best practices
-- Mock-data fallback for products when API is unavailable
+- Expo React Native app (SDK 54) with TypeScript and web export
+- UI: NativeWind/Tailwind + React Navigation
+- State: Redux Toolkit with typed selectors and slices
+- Auth: Email/password plus Google/Facebook via Expo AuthSession
+- Deployment: Static web via Vercel (expo export → dist/); mobile via Expo
 
 ---
 
-## 3. Architecture at a Glance
+## Architecture
 
-- Views (screens) → Components (UI)
-- Services (api/auth/products/http)
-- Store (Redux slices: user/products/cart/wishlist/orders)
-- Config (env/api constants)
-- Utilities (formatters, helpers)
+- Screens & Components: Login, Home, ProductList, ProductDetails, etc.
+- Redux Store: productsSlice, userSlice (cart/wishlist/orders planned)
+- Services: http (JWT attach, 401 handling), products, auth, config/api
+- Static Assets: required with static paths for web export compatibility
+- Build: expo export → dist/ with SPA rewrites and caching headers (vercel.json)
+
+Diagram: See `frontend/docs/architecture.svg` (also linked in frontend README).
+
+---
+
+## Key Technologies & Definitions
+
+- Expo SDK 54 / React Native 0.81.x / React 19 / TypeScript
+- Redux Toolkit & React Redux for predictable state management
+- NativeWind/Tailwind for styling
+- React Navigation for navigation stacks and tabs
+- Expo AuthSession and WebBrowser for OAuth flows
+- Sharp (optional) for WebP image optimization in web builds
+
+---
+
+## API Endpoints (Client Usage)
+
+- Products: `GET /api/products` with `page`, `limit`, `q`, `category`, `sort`
+- Categories: `GET /api/categories`
+- Auth: `POST /api/auth/token` (username/password), `POST /api/auth/token/refresh`
+- Provider exchange: `POST /api/auth/google/exchange`, `POST /api/auth/facebook/exchange`
+
+Note: Frontend centralizes requests through `services/http.ts` and only attaches JWT for calls to the configured API origin.
+
+---
+
+## Asynchronous Tasks & Scheduling (Frontend Perspective)
+
+- Uses async thunks/promises to fetch data without blocking UI
+- Background tasks (push notifications, periodic sync) can be added via Expo APIs (future)
+
+---
+
+## Security Features & Definitions
+
+- JWT handling: Access token attached only for API origin requests
+- Secure redirects: OAuth flows via AuthSession; UI disabled if IDs missing
+- CORS-awareness: Frontend expects backend CORS to include Vercel domain(s)
+- Input validation: Basic client-side checks; server remains source of truth
+
+---
+
+## Error Monitoring & Logging
+
+- Console and global error boundaries (add Sentry for production parity)
+- Graceful fallbacks: mock product data if API misconfigured
+
+---
+
+## Testing & Quality Assurance
+
+- Type checking via `npm run typecheck`
+- Jest scaffold for unit tests (see `frontend/jest.config.js` and `src/utils/__tests__/`)
+- Suggested e2e: Detox (native) or Playwright (web) for critical flows
+
+---
+
+## Deployment & Operations
+
+- Web (Vercel):
+  - Build: `npm run vercel-build` → `dist/`
+  - SPA rewrites for non-file URLs only: `/((?!.*\.).*)`
+  - Caching: `index.html` no-cache; static assets immutable
+  - Optional `optimize-images` if `sharp` is installed
+- Mobile: Run in Expo Go or build EAS (future)
+
+---
+
+## Advanced Features
+
+- Performance: FlatList windowing, memoized components, optional WebP
+- Accessibility: roles, labels, color contrast, inclusive focus order
+- Deep linking (future), universal links (future)
+
+---
+
+## Directory Structure Explained
 
 ```text
-src/
-  assets/       # images, icons, product images
-  components/   # Button, Input, ProductCard, ...
-  config/       # api.ts, env.ts
-  navigation/   # navigator setup
-  screens/      # Login, Home, ProductList, ...
-  services/     # http.ts, auth.ts, products.ts
-  store/        # index.ts + slices
-  utils/        # currency, misc utils
+frontend/
+├── app.json
+├── App.tsx
+├── babel.config.js
+├── metro.config.js
+├── nativewind-env.d.ts
+├── package.json
+├── postcss.config.js
+├── scripts/
+│   └── optimize-images.mjs
+├── src/
+│   ├── App.tsx
+│   ├── assets/
+│   │   ├── icons/
+│   │   ├── images/
+│   │   └── product-images/
+│   ├── components/
+│   ├── config/
+│   │   ├── api.ts
+│   │   └── env.ts
+│   ├── navigation/
+│   ├── screens/
+│   ├── services/
+│   │   ├── auth.ts
+│   │   ├── http.ts
+│   │   └── products.ts
+│   ├── store/
+│   │   ├── index.ts
+│   │   ├── productsSlice.ts
+│   │   └── userSlice.ts
+│   └── utils/
+│       └── currency.ts
+├── tailwind.config.js
+├── tsconfig.json
+└── vercel.json
 ```
 
 ---
 
-## 4. Environment Variables
+## Summary
 
-- `API_URL` — Backend base URL (CORS must allow your domain)
-- `EXPO_PUBLIC_FACEBOOK_APP_ID`
-- `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`
-- `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID` (mobile)
-- `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID` (mobile)
-
- Notes:
- 
-- Web build reads these at build time. Changing them requires a redeploy.
-- The app won’t crash if API_URL is missing; it shows mock data for products.
+- Cross-platform frontend: fast, accessible, and production-ready
+- Resilient to misconfiguration with safe fallbacks for web
+- Integrates cleanly with the Django backend via a typed, centralized API layer
 
 ---
 
-## 5. Dev Commands
+## Q&A
 
-- Start dev server: `npx expo start`
-- Android: `npm run android`  (emulator or Expo Go)
-- iOS (macOS): `npm run ios`
-- Web dev: `npm run web`
-- Web export: `npm run build:web` → `dist/`
-- Vercel build: `npm run vercel-build` (optimize images + export)
-
----
-
-## 6. Deployment (Web / Vercel)
-
-- `vercel.json` controls static build + headers
-  - Build command: `npm run vercel-build`
-  - Output dir: `dist`
-  - SPA rewrites: only for URLs without a file extension `/((?!.*\.).*)`
-  - Caching: `index.html` no-cache; static assets immutable
-- `optimize-images` creates WebP copies if `sharp` is available (optional)
-
----
-
-## 7. Notable Implementation Details
-
-- Centralized fetch (`services/http.ts`) attaches JWT when calling `API_URL`
-- 401 handler triggers global sign-out/banner path when needed
-- Social auth guarded: UI disabled if IDs missing to avoid runtime errors
-- Assets required statically (no dynamic `require`) for export compatibility
-
----
-
-## 8. Accessibility and UX
-
-- Buttons have `accessibilityRole` and labels; touch targets ≥ 44px
-- Focus order, readable contrast, and non-color status indicators
-- KeyboardAvoidingView and flexible layouts for smaller screens
-
----
-
-## 9. Performance
-
-- WebP assets (optional) + immutable caching for hashed files
-- FlatList usage with windowing for large catalogs
-- Avoid unnecessary re-renders via memoization in critical components
-
----
-
-## 10. Troubleshooting
-
-- Clear Metro cache: `npx expo start --clear`
-- Blank page on web: check env vars, SPA rewrite, browser console
-- Asset bundling errors on export: ensure static `require()` paths
-- CORS/API errors: update backend CORS_ALLOWED_ORIGINS with Vercel domain
-
----
-
-## 11. Roadmap (Nice-to-haves)
-
-- Real token validation against Google/Facebook endpoints
-- E2E tests for critical flows (login, browse, add-to-cart)
-- Skeleton states for all major screens
-- Deep linking and universal links setup
-
----
-
-## 12. Credits
-
-- Expo, React Native, Redux Toolkit, NativeWind, React Navigation
+- Questions about the frontend implementation?
