@@ -1,68 +1,63 @@
-# EComShop (Expo SDK 54)
+# EComShop Frontend (Expo SDK 54)
 
-Web export and deploy
+React Native app (web + mobile) using Expo, TypeScript, Redux Toolkit, NativeWind/Tailwind, and React Navigation. Web export is deployed as a static site.
 
-- Build static web assets:
-  - npm run build:web
-  - Output: dist/
+## Commands
 
-- Deploy to Vercel/Netlify:
-  - Set the output/public directory to dist
-  - No build command if you pre-export locally; otherwise use the same build:web command on CI
+- Start dev server: `npx expo start`
+- Android: `npm run android`
+- iOS (macOS): `npm run ios`
+- Web dev: `npm run web`
+- Web export: `npm run build:web` → outputs `dist/`
+- Vercel build: `npm run vercel-build` (runs image optimize + export)
 
-Notes
+## Environment
 
-- NativeWind + Tailwind are configured via babel preset and postcss.
-- Module aliases are available (@components, @screens, @store, etc.).
+Configure `frontend/.env` (or Vercel env):
 
-## E-Commerce Frontend
+- `API_URL` — Backend base URL
+- `EXPO_PUBLIC_FACEBOOK_APP_ID`
+- `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`
+- `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID` (mobile)
+- `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID` (mobile)
 
-This is a React Native app built with TypeScript, Redux Toolkit, and NativeWind (Tailwind CSS for React Native).
+Note: The app will still render if `API_URL` is missing; it falls back to mock data for product lists.
 
-## Features
+## Web deployment (Vercel)
 
-- Product catalog with API integration
-- Filtering (category, multi-criteria), sorting (price)
-- Pagination & infinite scrolling
-- Responsive, accessible UI
-- Authentication, cart, checkout, profile, and order history
-- Localized currency display (GH₵) with a shared formatter util
+Vercel config is in `vercel.json`:
 
-## Project Structure
+- Build Command: `npm run vercel-build`
+- Output Directory: `dist`
+- SPA rewrites only for routes without a file extension: `/((?!.*\.).*)`
+- Caching headers: `index.html` no-cache; static assets immutable
 
-See the `src/` folder for all app code, organized by features and domain.
+The `optimize-images` script is optional; if `sharp` is unavailable, it skips generation.
 
-## Getting Started
+## Android quickstart
 
-1. Install dependencies: `npm install`
-2. Start the app: `npm start` (or `npm run android` / `npm run ios` / `npm run web`)
-3. Configure environment variables in `.env`
+1) Install Expo Go on your device or start an Android emulator.
+2) Run `npx expo start` and press `a` for emulator, or scan the QR with Expo Go.
+3) Ensure the device and PC are on the same network.
 
-### Currency formatting (GH₵)
+## Notes
 
-All price displays use a shared formatter:
+- NativeWind/Tailwind is configured in `babel.config.js` and PostCSS.
+- Module aliases are set (e.g., `@components`, `@screens`, `@store`, `@config`, `@services`).
+- Facebook/Google auth use Expo AuthSession; missing web client IDs keep UI disabled instead of crashing.
+
+## Accessibility
+
+- Buttons use `accessibilityRole="button"` and labels; touch targets are >= 44px.
+- Selected state uses `accessibilityState` where appropriate.
+
+## Currency formatting (GH₵)
 
 - `src/utils/currency.ts` exports `formatCurrency(value: number)`
-- Backed by `Intl.NumberFormat('en-GH', { currency: 'GHS' })` with a fallback for environments without Intl
-- Example: `formatCurrency(1234.5) // => GH₵1,234.50`
+- Uses `Intl.NumberFormat('en-GH', { currency: 'GHS' })` with a safe fallback
 
-### Accessibility conventions
+## Troubleshooting
 
-- Buttons and tappable cards have `accessibilityRole="button"`, `accessibilityLabel`, and minimum touch target size (>= 44px height)
-- Filter chips (category bar) expose selected state via `accessibilityState={{ selected: true }}`
-- Prefer semantic text via headings and labels; avoid color as the only indicator
-
-## Tech Stack
-
-- React Native
-- TypeScript
-- Redux Toolkit
-- NativeWind (Tailwind CSS)
-- Expo
-
-## Deployment
-
-- Deploy static web build to Vercel/Netlify
-  - Vercel configuration is in `vercel.json` (output directory: `dist`)
-  - CI workflow `.github/workflows/frontend-ci.yml` builds and uploads the web artifact on every push/PR
-- Use Expo for mobile deployment
+- Clear Metro cache: `npx expo start --clear`
+- Asset require errors on web export → replace dynamic requires with static `require()` entries
+- Blank page on web → ensure env vars set, SPA rewrite excludes asset requests, and check browser console

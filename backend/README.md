@@ -1,16 +1,14 @@
 # E-Commerce Backend (Django)
 
-This is the backend API for the E-Commerce Mobile App, built with Django and Django REST Framework. It provides secure, scalable endpoints for product management, user authentication, cart operations, and more.
+Backend API for the E-Commerce app, built with Django and Django REST Framework. Provides product/catalog endpoints, JWT auth, provider token exchange (Google/Facebook), and a dev-friendly forgot-password flow.
 
 ## Features
 
-- **RESTful API** for all product, cart, and user operations
+- **Products/Categories** with search, filter, and sort
 - **JWT Authentication** for secure login and registration
-- **Product Management**: CRUD for products and categories
-- **User Management**: Registration, login, and profile endpoints
-- **Cart Management**: Add, update, and remove items from cart
-- **PostgreSQL** as the production database
-- **Admin Panel** for easy management
+- **Provider token exchange** endpoints for Google and Facebook
+- **Forgot Password** endpoint (sends a simulated email with a reset link)
+- **PostgreSQL** support via `DATABASE_URL`
 
 ## Tech Stack
 
@@ -65,7 +63,7 @@ backend/
    pip install -r requirements.txt
    ```
 
-4. Configure your PostgreSQL database in `ecommerce/settings.py`.
+4. Configure your PostgreSQL database via `DATABASE_URL` or edit `ecommerce/settings.py`.
 5. Run migrations and start the server:
 
    ```sh
@@ -75,22 +73,38 @@ backend/
 
 ## API Endpoints
 
-- `/api/products/` — List, create, update, delete products
-- `/api/categories/` — List, create, update, delete categories
-- `/api/cart/` — Manage cart items
-- `/api/users/` — Register, login, profile
+- `GET /api/products/` — List products with `page`, `limit`, `q`, `category`, `sort`
+- `GET /api/categories/` — List categories
+- `POST /api/auth/register/` — Create user
+- `POST /api/auth/password/forgot/` — Request password reset (dev simulation)
+- `POST /api/auth/google/exchange/` — Exchange Google access_token for JWT
+- `POST /api/auth/facebook/exchange/` — Exchange Facebook access_token for JWT
+- `POST /api/auth/token/` — Obtain JWT (username/password)
+- `POST /api/auth/token/refresh/` — Refresh access token
 
 ## Environment Variables
 
-- Set your database credentials and secret keys in environment variables or `settings.py`.
+Set via your process manager/host environment:
+
+- `DATABASE_URL` — e.g., `postgres://user:pass@host:5432/dbname`
+- `DJANGO_SECRET_KEY`
+- `DEBUG` — `True`/`False`
+- `ALLOWED_HOSTS` — include hostnames/domains (e.g., Render/Heroku + localhost)
+- `CORS_ALLOWED_ORIGINS` — include your Vercel domain(s) and local frontend URL
+
+Optional:
+
+- `FRONTEND_BASE_URL` — used to construct password reset links in dev
 
 ## Testing
 
-- Run tests with:
+Run tests:
 
-  ```sh
-  python manage.py test
-  ```
+```sh
+python manage.py test
+```
+
+Includes tests for token exchange endpoints in `users/tests.py`.
 
 ## License
 

@@ -1,6 +1,6 @@
-# E-Commerce Mobile App
+# E-Commerce App (Django + Expo)
 
-A modern, full-stack e-commerce mobile application built with Django REST framework and Expo React Native (frontend). This project follows best practices for scalability, maintainability, and developer experience.
+A modern, full-stack e-commerce application built with Django REST Framework (backend) and Expo React Native (frontend) with web export. The app supports social auth token exchange endpoints, infinite product lists with filters/sort, and static web deployment to Vercel.
 
 ## Table of Contents
 
@@ -27,22 +27,19 @@ A modern, full-stack e-commerce mobile application built with Django REST framew
 
 ### Backend Features
 
-- **RESTful API**: Django REST Framework for all product, cart, and user endpoints
-- **Authentication**: JWT-based authentication for secure login and registration
-- **Product Management**: CRUD operations for products and categories
-- **User Management**: Registration, login, and profile endpoints
-- **Database**: PostgreSQL for robust, scalable data storage
+- **RESTful API**: Django REST Framework for products and categories
+- **Authentication**: JWT-based flows plus provider token exchange endpoints (Google/Facebook)
+- **Products API**: Pagination (page, limit), search (q), filters (category), and sort (price/-price)
+- **Forgot Password**: Endpoint that simulates email sending (extend in production)
+- **Database**: PostgreSQL (via DATABASE_URL), local dev compatible
 
 ### Frontend Features
 
-- **Product Catalog**: Infinite scroll, filtering by category, and sorting by price
-- **Product Details**: Detailed product view with images and descriptions
-- **Cart**: Add, remove, and update quantities; persistent cart state
-- **Authentication**: Login, registration, and profile management (JWT-based)
-- **Navigation**: Modern tab and stack navigation with icons
-- **State Management**: Redux Toolkit for cart and auth state
-- **Styling**: NativeWind (Tailwind CSS for React Native) for a modern, accessible UI
-- **Image Assets**: Support for custom branding, logos, and product images
+- **Catalog**: Infinite scroll with refresh; search, category filter, sort
+- **Auth**: Username/password; Google and Facebook via Expo AuthSession (web requires client IDs)
+- **State**: Redux Toolkit with JWT persistence and centralized fetch attaching Authorization
+- **UI**: NativeWind/Tailwind; responsive web layout; accessible interactions
+- **Web Export**: Static build with SPA rewrites and caching headers via `vercel.json`
 
 ## Tech Stack
 
@@ -115,7 +112,7 @@ E-Commerce/
    pip install -r requirements.txt
    ```
 
-4. Configure your PostgreSQL database in `settings.py`.
+4. Configure your PostgreSQL database in `ecommerce/settings.py` (or set `DATABASE_URL`).
 
 5. Run migrations and start the server:
 
@@ -150,7 +147,21 @@ E-Commerce/
 
 ## Environment Variables
 
-- Configure API endpoints and secrets in environment files as needed (e.g., `.env` for Django, or use `app.json` for Expo).
+Frontend (`frontend/.env` or Vercel env):
+
+- `API_URL` — Base URL to backend, e.g., `https://your-api.example.com`
+- `EXPO_PUBLIC_FACEBOOK_APP_ID` — Facebook App ID for web
+- `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` — Google OAuth client ID for web
+- `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID` — Google client ID for Android (optional for web)
+- `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID` — Google client ID for iOS (optional for web)
+
+Backend (environment or `.env` loaded by your process manager):
+
+- `DATABASE_URL` — PostgreSQL connection string
+- `DJANGO_SECRET_KEY` — Django secret key
+- `DEBUG` — `True`/`False`
+- `ALLOWED_HOSTS` — e.g., your Render/Heroku hostnames and localhost
+- `CORS_ALLOWED_ORIGINS` — include your Vercel domain(s) and local dev URL
 
 ## Customization & Branding
 
@@ -167,7 +178,7 @@ E-Commerce/
 
 ## Deploy to Vercel
 
-Static web deploys are supported via Expo’s web export and a Vercel static build.
+Static web deploys are supported via Expo’s web export and a Vercel static build (`frontend/vercel.json`).
 
 ### One-time setup
 
@@ -176,16 +187,11 @@ Static web deploys are supported via Expo’s web export and a Vercel static bui
 
 ### Vercel project settings
 
-This repository contains `frontend/vercel.json` and scripts tailored for static export.
-
 - Root Directory: `frontend`
 - Build Command: `npm run vercel-build`
 - Output Directory: `dist`
-- Framework: Other (or leave auto) — `vercel.json` sets `framework: null`.
-
-Notes:
-
-- If Vercel warns that Project Settings are ignored, that’s expected — `builds` in `vercel.json` take precedence.
+- Framework: Other (or leave auto) — `framework: null` is set in `vercel.json`.
+   - Note: Project Settings may be ignored because `builds` is defined in `vercel.json`.
 
 ### Environment variables (Vercel → Settings → Environment Variables)
 
@@ -204,18 +210,18 @@ Expo injects these at build-time. Changing them requires a new deploy.
 `npm run vercel-build` runs two steps:
 
 1) `npm run optimize-images`
-    - Creates lossy `.webp` copies alongside `.png`/`.jpg` in:
-       - `src/assets/product-images`
-       - `src/assets/images`
-       - `src/assets`
-    - Safe to re-run. Skips files that already have `.webp`.
+   - If `sharp` is available, creates `.webp` copies alongside `.png`/`.jpg` in:
+     - `src/assets/product-images`
+     - `src/assets/images`
+     - `src/assets`
+   - If `sharp` is not available, the step is skipped (build still succeeds).
 
 2) `npm run build:web`
-    - Runs `expo export --platform web --output-dir dist` to create a static site.
+   - Runs `expo export --platform web --output-dir dist` to create a static site.
 
 ### Routing and caching
 
-- SPA rewrites: All routes rewrite to `index.html`.
+- SPA rewrites: URLs without a file extension rewrite to `index.html` (`/((?!.*\.).*)`).
 - Caching (configured in `frontend/vercel.json`):
    - `index.html` — `Cache-Control: no-cache` (ensures users get the latest HTML).
    - Hashed/static assets (e.g., `/_expo/static/**`, `*.js|css|png|jpg|jpeg|webp|svg|ico`) — `Cache-Control: public, max-age=31536000, immutable`.
@@ -224,18 +230,18 @@ Expo injects these at build-time. Changing them requires a new deploy.
 ### Local verification
 
 - From `frontend/`:
-     - `npm ci` (or `npm install`)
+   - `npm ci` (or `npm install`)
    - `npm run optimize-images`
    - `npm run build:web`
    - Optionally serve `dist/` locally with your favorite static server to smoke test.
 
 ### Troubleshooting deploys
 
-- Missing script: `Missing required "vercel-build" script` → ensure `package.json` has `"vercel-build"`.
-- Dynamic require of assets fails on export → Use static `require('path/to/file.ext')` entries; dynamic paths cannot be statically analyzed.
-- 404s on deep links → Verify SPA rewrites to `index.html` are present.
+- Missing `vercel-build` script → Add it to `frontend/package.json`.
+- Export error: dynamic require() of assets → Replace with static requires (no computed paths).
+- Blank page: SPA rewrite capturing assets → Use extension-excluding rewrite and correct headers.
 - CORS errors calling the API → Add your Vercel domain(s) to Django CORS allow-list; ensure HTTPS.
-- Social login errors → Add Vercel domain to Google/Facebook app configs; verify redirect URIs.
+- Social login errors → Provide `EXPO_PUBLIC_*` IDs; Facebook/Google apps must allow your Vercel domain.
 
 
 ## Troubleshooting
