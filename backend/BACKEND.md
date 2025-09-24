@@ -103,7 +103,41 @@
 
 ## Directory Structure Explained
 
-- **backend/**: Project root
+```text
+backend/
+├── ecommerce/             # Django project configuration
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── celery.py          # Celery app (ready for background tasks)
+│   ├── settings.py        # Settings (DATABASE_URL, CORS, JWT, static)
+│   ├── urls.py            # Root URLConf (includes app urls)
+│   ├── views_and_root_urls.py
+│   └── wsgi.py
+├── products/              # Catalog domain (products, categories)
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── migrations/
+│   ├── models.py
+│   ├── serializers.py
+│   ├── urls.py            # Routers for products/categories
+│   ├── views.py           # page/limit, q, category, sort
+│   └── tests/
+│       └── tests.py
+├── users/                 # Auth and social token exchange
+│   ├── __init__.py
+│   ├── urls.py            # register, password/forgot, google/facebook exchange
+│   └── views.py
+├── manage.py
+├── requirements.txt
+└── README.md
+```
+
+Highlights:
+
+- API endpoints are namespaced under `/api/`
+- JWT via SimpleJWT; provider token exchange endpoints return a JWT
+- Run `python manage.py migrate` before `runserver`
 
 ---
 
