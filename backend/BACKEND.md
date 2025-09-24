@@ -1,4 +1,4 @@
-# Backend Slide Deck
+# EComShop Backend Slide Deck
 
 ---
 
