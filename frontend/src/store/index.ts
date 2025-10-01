@@ -68,7 +68,13 @@ export const hydrateState = async () => {
   const wishlist = await loadData('wishlist');
   if (wishlist) store.dispatch(setWishlist(wishlist));
   const user = await loadData('user');
-  if (user) store.dispatch(setUser(user));
+  // Ensure user state is consistent - if no user data but marked as authenticated, reset
+  if (user && user.isAuthenticated && user.user) {
+    store.dispatch(setUser(user));
+  } else {
+    // Clear any inconsistent state
+    store.dispatch(doLogout());
+  }
   const filters = await loadData('filters');
   if (filters) {
     if (typeof filters.category === 'string') store.dispatch(setCategory(filters.category));

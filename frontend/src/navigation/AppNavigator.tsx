@@ -23,30 +23,33 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AppNavigator = () => {
   const userState = useSelector((state: RootState) => (state.user as UserState));
-  const isAuthenticated = userState.isAuthenticated;
+  const isAuthenticated = userState.isAuthenticated && userState.user !== null;
   const user = userState.user;
 
+  // Debug log to help troubleshoot the Expo Go issue
+  console.log('AppNavigator - isAuthenticated:', isAuthenticated, 'user:', user?.name || 'null');
+
   return (
-    <Stack.Navigator initialRouteName={isAuthenticated ? 'Home' : 'Login'}>
+    <Stack.Navigator initialRouteName={isAuthenticated ? 'Home' : 'Login'} screenOptions={{ headerShown: true }}>
       {isAuthenticated ? (
         <>
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
-          <Stack.Screen name="Category" component={CategoryScreen} />
-          <Stack.Screen name="Cart" component={CartScreen} />
-          <Stack.Screen name="Checkout" component={CheckoutScreen} />
-          <Stack.Screen name="Profile" component={ProfileScreen} />
-          <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
+          <Stack.Screen name="ProductDetail" component={ProductDetailScreen} options={{ title: 'Product Details' }} />
+          <Stack.Screen name="Category" component={CategoryScreen} options={{ title: 'Category' }} />
+          <Stack.Screen name="Cart" component={CartScreen} options={{ title: 'Shopping Cart' }} />
+          <Stack.Screen name="Checkout" component={CheckoutScreen} options={{ title: 'Checkout' }} />
+          <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile' }} />
+          <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} options={{ title: 'Order History' }} />
           {user && user.role === 'admin' && (
-            <Stack.Screen name="AdminProductManagement" component={AdminProductManagementScreen} />
+            <Stack.Screen name="AdminProductManagement" component={AdminProductManagementScreen} options={{ title: 'Admin: Products' }} />
           )}
         </>
       ) : (
         <>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-          <Stack.Screen name="ResetLinkSent" component={ResetLinkSentScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Sign In' }} />
+          <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Create Account' }} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ title: 'Reset Password' }} />
+          <Stack.Screen name="ResetLinkSent" component={ResetLinkSentScreen} options={{ title: 'Check Your Email' }} />
         </>
       )}
     </Stack.Navigator>

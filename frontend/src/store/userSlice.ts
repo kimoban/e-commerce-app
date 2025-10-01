@@ -42,7 +42,7 @@ const userSlice = createSlice({
     },
     setUser(state, action: PayloadAction<UserState>) {
       state.user = action.payload.user;
-      state.isAuthenticated = action.payload.isAuthenticated;
+      state.isAuthenticated = action.payload.isAuthenticated && action.payload.user !== null;
       state.jwt = action.payload.jwt ?? null;
     },
   },
