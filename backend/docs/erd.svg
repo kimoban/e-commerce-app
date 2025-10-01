@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="900" viewBox="0 0 1280 900" role="img" aria-labelledby="title desc">
+    <title id="title">EComShop Backend ERD (Detailed)</title>
+    <desc id="desc">Entity Relationship Diagram for users, categories, products, carts, orders, addresses, and reviews with cardinalities and key fields.</desc>
+    <defs>
+        <style>
+            .box { fill: #ffffff; stroke: #1f2937; stroke-width: 2; rx: 8; }
+            .title { font: 700 14px 'Segoe UI', sans-serif; fill: #111827; }
+            .text { font: 12px 'Segoe UI', sans-serif; fill: #374151; }
+            .arrow { stroke: #6b7280; stroke-width: 2; marker-end: url(#arrowhead); }
+            .muted { fill: #6b7280; font: 11px 'Segoe UI', sans-serif; }
+            .legend { fill: #f9fafb; stroke: #d1d5db; stroke-width: 1; rx: 6; }
+        </style>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280" />
+        </marker>
+    </defs>
+
+    <!-- Legend -->
+    <rect class="legend" x="1020" y="20" width="240" height="110" />
+    <text class="title" x="1035" y="45">Legend</text>
+    <text class="text" x="1035" y="70">PK: Primary Key</text>
+    <text class="text" x="1035" y="90">FK: Foreign Key</text>
+    <text class="text" x="1035" y="110">UQ: Unique</text>
+
+    <!-- Entities Row 1 -->
+    <rect class="box" x="40" y="40" width="240" height="170"/>
+    <text class="title" x="55" y="60">Category</text>
+    <text class="text" x="55" y="85">id (PK)</text>
+    <text class="text" x="55" y="105">name (UQ): string</text>
+    <text class="text" x="55" y="125">description: text (nullable)</text>
+    <text class="text" x="55" y="145">image: url (nullable)</text>
+    <text class="text" x="55" y="165">created_at, updated_at</text>
+
+    <rect class="box" x="320" y="40" width="280" height="200"/>
+    <text class="title" x="335" y="60">Product</text>
+    <text class="text" x="335" y="85">id (PK)</text>
+    <text class="text" x="335" y="105">category_id (FK → Category.id)</text>
+    <text class="text" x="335" y="125">name: string; description: text</text>
+    <text class="text" x="335" y="145">price: decimal(10,2)</text>
+    <text class="text" x="335" y="165">image: url; brand: string (nullable)</text>
+    <text class="text" x="335" y="185">stock: int; rating: float; num_reviews: int; is_active: bool</text>
+
+    <rect class="box" x="640" y="40" width="240" height="140"/>
+    <text class="title" x="655" y="60">User</text>
+    <text class="text" x="655" y="85">id (PK)</text>
+    <text class="text" x="655" y="105">username (UQ), email (UQ)</text>
+    <text class="text" x="655" y="125">date_joined</text>
+
+    <rect class="box" x="900" y="40" width="300" height="190"/>
+    <text class="title" x="915" y="60">Address</text>
+    <text class="text" x="915" y="85">id (PK)</text>
+    <text class="text" x="915" y="105">user_id (FK → User.id)</text>
+    <text class="text" x="915" y="125">street, city, state, country</text>
+    <text class="text" x="915" y="145">postal_code: string; is_default: bool</text>
+    <text class="text" x="915" y="165">created_at, updated_at</text>
+
+    <!-- Entities Row 2 -->
+    <rect class="box" x="40" y="290" width="240" height="140"/>
+    <text class="title" x="55" y="310">Cart</text>
+    <text class="text" x="55" y="335">id (PK)</text>
+    <text class="text" x="55" y="355">user_id (FK → User.id, OneToOne)</text>
+    <text class="text" x="55" y="375">created_at, updated_at</text>
+
+    <rect class="box" x="320" y="290" width="260" height="140"/>
+    <text class="title" x="335" y="310">CartItem</text>
+    <text class="text" x="335" y="335">id (PK)</text>
+    <text class="text" x="335" y="355">cart_id (FK → Cart.id)</text>
+    <text class="text" x="335" y="375">product_id (FK → Product.id); quantity: int</text>
+
+    <rect class="box" x="600" y="290" width="260" height="170"/>
+    <text class="title" x="615" y="310">Order</text>
+    <text class="text" x="615" y="335">id (PK)</text>
+    <text class="text" x="615" y="355">user_id (FK → User.id)</text>
+    <text class="text" x="615" y="375">address_id (FK → Address.id, nullable)</text>
+    <text class="text" x="615" y="395">total: decimal(10,2); status: string</text>
+    <text class="text" x="615" y="415">created_at, updated_at</text>
+
+    <rect class="box" x="880" y="290" width="260" height="140"/>
+    <text class="title" x="895" y="310">OrderItem</text>
+    <text class="text" x="895" y="335">id (PK)</text>
+    <text class="text" x="895" y="355">order_id (FK → Order.id)</text>
+    <text class="text" x="895" y="375">product_id (FK → Product.id); quantity: int; price: decimal(10,2)</text>
+
+    <rect class="box" x="40" y="500" width="260" height="140"/>
+    <text class="title" x="55" y="520">Review</text>
+    <text class="text" x="55" y="545">id (PK)</text>
+    <text class="text" x="55" y="565">user_id (FK → User.id)</text>
+    <text class="text" x="55" y="585">product_id (FK → Product.id)</text>
+    <text class="text" x="55" y="605">rating: int; comment: text (nullable)</text>
+    <text class="text" x="55" y="625">created_at</text>
+
+    <!-- Relationships with labels + cardinalities -->
+    <!-- Category 1..* Product -->
+    <line class="arrow" x1="280" y1="130" x2="320" y2="130" />
+    <text class="muted" x="285" y="122">1</text>
+    <text class="muted" x="300" y="145">categorizes</text>
+    <text class="muted" x="325" y="122">0..*</text>
+
+    <!-- User 1..* Address -->
+    <line class="arrow" x1="880" y1="100" x2="900" y2="100" />
+    <text class="muted" x="860" y="92">1</text>
+    <text class="muted" x="905" y="92">0..*</text>
+    <text class="muted" x="885" y="115">has</text>
+
+    <!-- User 1..1 Cart -->
+    <line class="arrow" x1="640" y1="160" x2="640" y2="290" />
+    <text class="muted" x="645" y="210">1 ↔ 1</text>
+    <text class="muted" x="645" y="228">owns</text>
+
+    <!-- Cart 1..* CartItem -->
+    <line class="arrow" x1="300" y1="360" x2="320" y2="360" />
+    <text class="muted" x="285" y="352">1</text>
+    <text class="muted" x="325" y="352">0..*</text>
+    <text class="muted" x="305" y="375">contains</text>
+
+    <!-- Product 1..* CartItem -->
+    <line class="arrow" x1="460" y1="240" x2="460" y2="290" />
+    <text class="muted" x="465" y="265">1 → 0..*</text>
+    <text class="muted" x="465" y="282">in</text>
+
+    <!-- User 1..* Order -->
+    <line class="arrow" x1="760" y1="180" x2="760" y2="290" />
+    <text class="muted" x="765" y="230">1 → 0..*</text>
+    <text class="muted" x="765" y="248">places</text>
+
+    <!-- Order 1..* OrderItem -->
+    <line class="arrow" x1="860" y1="360" x2="880" y2="360" />
+    <text class="muted" x="845" y="352">1</text>
+    <text class="muted" x="885" y="352">1..*</text>
+    <text class="muted" x="865" y="375">contains</text>
+
+    <!-- Product 1..* OrderItem -->
+    <line class="arrow" x1="740" y1="290" x2="740" y2="240" />
+    <text class="muted" x="745" y="265">1 → 0..*</text>
+    <text class="muted" x="745" y="282">included_in</text>
+
+    <!-- Order (0..1) → Address (1..*) -->
+    <line class="arrow" x1="860" y1="330" x2="900" y2="230" />
+    <text class="muted" x="865" y="300">0..1 → 1</text>
+    <text class="muted" x="880" y="250">ships_to</text>
+
+    <!-- User 1..* Review -->
+    <line class="arrow" x1="300" y1="540" x2="640" y2="200" />
+    <text class="muted" x="330" y="520">1 → 0..*</text>
+    <text class="muted" x="350" y="500">writes</text>
+
+    <!-- Product 1..* Review -->
+    <line class="arrow" x1="300" y1="560" x2="440" y2="240" />
+    <text class="muted" x="320" y="545">1 → 0..*</text>
+    <text class="muted" x="335" y="525">receives</text>
+</svg>

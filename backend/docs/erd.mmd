@@ -1,0 +1,105 @@
+%% Mermaid ERD for EComShop Backend
+%% View with a Mermaid-compatible renderer
+
+erDiagram
+    User ||--o{ Address : "has"
+    User ||--|| Cart : "owns"
+    Cart ||--o{ CartItem : "contains"
+    Product ||--o{ CartItem : "in"
+
+    User ||--o{ Order : "places"
+    Order ||--o{ OrderItem : "contains"
+    Product ||--o{ OrderItem : "includes"
+    Order }o--|| Address : "ships_to"
+
+    Category ||--o{ Product : "categorizes"
+
+    User ||--o{ Review : "writes"
+    Product ||--o{ Review : "receives"
+
+    User {
+        int id PK
+        string username
+        string email
+        date joined
+    }
+
+    Address {
+        int id PK
+        int user_id FK
+        string street
+        string city
+        string state
+        string country
+        string postal_code
+        bool is_default
+        datetime created_at
+        datetime updated_at
+    }
+
+    Cart {
+        int id PK
+        int user_id FK
+        datetime created_at
+        datetime updated_at
+    }
+
+    CartItem {
+        int id PK
+        int cart_id FK
+        int product_id FK
+        int quantity
+        datetime added_at
+    }
+
+    Category {
+        int id PK
+        string name
+        string description
+        string image
+        datetime created_at
+        datetime updated_at
+    }
+
+    Product {
+        int id PK
+        string name
+        string description
+        decimal price
+        int category_id FK
+        string image
+        string brand
+        int stock
+        float rating
+        int num_reviews
+        bool is_active
+        datetime created_at
+        datetime updated_at
+    }
+
+    Order {
+        int id PK
+        int user_id FK
+        int address_id FK
+        decimal total
+        string status
+        datetime created_at
+        datetime updated_at
+    }
+
+    OrderItem {
+        int id PK
+        int order_id FK
+        int product_id FK
+        int quantity
+        decimal price
+    }
+
+    Review {
+        int id PK
+        int user_id FK
+        int product_id FK
+        int rating
+        string comment
+        datetime created_at
+    }

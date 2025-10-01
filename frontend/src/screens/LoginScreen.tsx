@@ -165,6 +165,18 @@ const LoginScreen = () => {
 
               <Button title="Login" onPress={handleLogin} disabled={!isValid} style={{ marginTop: 16 }} />
 
+              {/* Development: Skip Login for testing */}
+              {__DEV__ && (
+                <TouchableOpacity 
+                  onPress={() => dispatch(login({ id: 'demo', name: 'Demo User', email: 'demo@example.com', role: 'user' }))}
+                  className="mt-3 p-3 bg-gray-100 rounded-lg"
+                  accessibilityRole="button"
+                  accessibilityLabel="Skip login for testing"
+                >
+                  <Text className="text-center text-gray-600 font-medium">🚀 Skip Login (Dev Only)</Text>
+                </TouchableOpacity>
+              )}
+
               {/* Social login options */}
               <View className="mt-4">
                 <Text className="text-center text-gray-500 mb-2">Or continue with</Text>

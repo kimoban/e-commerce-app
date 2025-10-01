@@ -22,6 +22,11 @@
 - **API Layer**: Django REST Framework (DRF) exposes resources via RESTful endpoints.
 - **Settings**: Environment-based configuration for development, testing, and production.
 
+ERD:
+
+- Mermaid source: `backend/docs/erd.mmd`
+- SVG preview: `backend/docs/erd.svg`
+
 ---
 
 ## Key Technologies & Definitions
